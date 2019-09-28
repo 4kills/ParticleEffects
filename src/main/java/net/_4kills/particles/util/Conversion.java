@@ -9,8 +9,8 @@ public final class Conversion {
 
     public static DMatrix3 bukkitVecToMatrix(Vector vec) {
         DMatrix3 m = new DMatrix3();
-        m.a1 = vec.getX();
-        m.a2 = vec.getY();
+        m.a1 = -vec.getX();
+        m.a2 = -vec.getY();
         m.a3 = vec.getZ();
         return m;
     }

@@ -54,7 +54,7 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
     public void run() {
         if (arrow.isInBlock()) return;
         //double phi = angleBetween(direction[0], Conversion.bukkitVecToMatrix(arrow.getLocation().getDirection()));
-        direction[0] = Conversion.bukkitVecToMatrix(arrow.getLocation().getDirection());
+        //direction[0] = Conversion.bukkitVecToMatrix(arrow.getLocation().getDirection());
         position[0] = Conversion.bukkitVecToMatrix(arrow.getLocation());
 
         /*if(phi != 0) {
