@@ -35,6 +35,14 @@ public abstract class Ops {
         return m;
     }
 
+    public static DMatrix3 midpointFormula(DMatrix3 u, DMatrix3 v) {
+        DMatrix3 res = new DMatrix3();
+        res.a1 = (u.a1 + v.a1) / 2;
+        res.a2 = (u.a2 + v.a2) / 2;
+        res.a3 = (u.a3 + v.a3) / 2;
+        return res;
+    }
+
     public static DMatrix3 rotateAboutVector(DMatrix3 rotor, DMatrix3 stator, double theta) {
         DMatrix3x3 rotated = new DMatrix3x3();
         rotated.a11 = rotor.a1;
@@ -49,7 +57,7 @@ public abstract class Ops {
         DMatrix3x3 Ry = MatrixConstructor.Ry(Math.atan(stator.a1 / stator.a3));
         DMatrix3x3 RyT = new DMatrix3x3(Ry);
         transpose(RyT);
-
+        (multiply( RzToPlaneT, rotated)).print();
         rotated = multiply(RzToPlane, Ry, Rz, RyT, RzToPlaneT, rotated);
 
         rotor.a1 = rotated.a11;

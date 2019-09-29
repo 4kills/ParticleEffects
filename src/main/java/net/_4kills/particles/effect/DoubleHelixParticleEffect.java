@@ -61,23 +61,42 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
         return true;
     }
 
+    private void additionalParticles(int partDens, DMatrix3 pos0, DMatrix3 pos1 ) {
+        if (partDens < 2) return;
+        DMatrix3 u = new DMatrix3(pos0);
+        subtractEquals(u, pos1);
+        scale(1 / (double)partDens,u);
+
+        DMatrix3 pos = new DMatrix3(pos1);
+        DMatrix3 nor = new DMatrix3(n[0]);
+
+        for (int i = 0; i < partDens; i++) {
+            nor = rotateAboutVector(nor, direction[0], -theta / (double)partDens);
+            addEquals(pos, u);
+
+            DMatrix3 spawn = new DMatrix3(pos);
+            addEquals(spawn, nor);
+            draw(Particle.DRIP_WATER, spawn, 1);
+
+            DMatrix3 inverse = new DMatrix3(nor);
+            scale(-2, inverse);
+            addEquals(inverse, pos);
+            draw(Particle.DRIP_WATER, inverse, 1);
+        }
+    }
+
     @Override
     public void run() {
         if (arrowIsStuck()) this.cancel();
 
-
-        //double phi = angleBetween(direction[0], Conversion.bukkitVecToMatrix(arrow.getLocation().getDirection()));
-        //direction[0] = Conversion.bukkitVecToMatrix(arrow.getLocation().getDirection());
         DMatrix3 pos =  Conversion.bukkitVecToMatrix(arrow.getLocation());
 
-        /*if(phi != 0) {
-            DMatrix3 rotAxis = crossProduct(direction[0], n[0]);
-            n[0] = rotateAboutVector(n[0], rotAxis, phi);
-        }*/
         n[0] = rotateAboutVector(n[0], direction[0], theta);
 
         DMatrix3 res = new DMatrix3(pos);
         addEquals(res, n[0]);
+
+        additionalParticles(2, position.get(position.size()-1), pos);
 
         draw(Particle.DRIP_WATER, res, 1);
 
