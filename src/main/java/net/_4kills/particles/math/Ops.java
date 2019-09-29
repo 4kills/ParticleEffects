@@ -3,6 +3,8 @@ package net._4kills.particles.math;
 import org.ejml.data.DMatrix3;
 import org.ejml.data.DMatrix3x3;
 
+import java.util.Arrays;
+
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
 public abstract class Ops {
@@ -33,36 +35,21 @@ public abstract class Ops {
     }
 
     public static DMatrix3 rotateAboutVector(DMatrix3 rotor, DMatrix3 stator, double theta) {
-        DMatrix3x3 Txz = MatrixConstructor.toXZPlane(stator);
-        DMatrix3x3 Tz = MatrixConstructor.toZAxis(stator);
-        DMatrix3x3 Rz = MatrixConstructor.Rz(theta);
-        DMatrix3x3 Tz_T = new DMatrix3x3();
-        DMatrix3x3 Txz_T = new DMatrix3x3();
-        transpose(Tz, Tz_T);
-        transpose(Txz, Txz_T);
-
         DMatrix3x3 rotated = new DMatrix3x3();
         rotated.a11 = rotor.a1;
         rotated.a21 = rotor.a2;
         rotated.a31 = rotor.a3;
 
-        /*mult(Txz_1, Tz_1, Tz_1);
-        mult(Tz_1, Rz, Rz);
-        mult(Rz, Tz, Tz);
-        mult(Tz, Txz, Txz);*/
-        //mult(Rz, rotated, rotated);
+        DMatrix3x3 Rz = MatrixConstructor.Rz(theta);
 
-        // rotated = Txz_T * Tz_T * Rz(theta) * Tz * Txz * rotor
-
-        //rotated = multiply(multiply(multiply(multiply(multiply(Txz_T, Tz_T),Rz), Tz), Txz), rotated);
-        //rotated = multiply(multiply(multiply(multiply(Txz_T, Tz_T), Rz), Tz), rotated);
-        //rotated = multiply(Txz_T, Tz_T, Rz, Tz, Txz, rotated);
-        //rotated = multiply(Tz, Rz, Tz_T, rotated);
+        DMatrix3x3 RzToPlane = MatrixConstructor.Rz(Math.atan(stator.a2 / stator.a1));
+        DMatrix3x3 RzToPlaneT = new DMatrix3x3(RzToPlane);
+        transpose(RzToPlaneT);
         DMatrix3x3 Ry = MatrixConstructor.Ry(Math.atan(stator.a1 / stator.a3));
-        DMatrix3x3 RyT = new DMatrix3x3();
-        transpose(Ry, RyT);
-        rotated = multiply(Ry, Rz, RyT, rotated);
-        rotated.print();
+        DMatrix3x3 RyT = new DMatrix3x3(Ry);
+        transpose(RyT);
+
+        rotated = multiply(RzToPlane, Ry, Rz, RyT, RzToPlaneT, rotated);
 
         rotor.a1 = rotated.a11;
         rotor.a2 = rotated.a21;

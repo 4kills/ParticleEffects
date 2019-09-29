@@ -66,12 +66,12 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
         DMatrix3 res = new DMatrix3(position[0]);
         addEquals(res, n[0]);
 
-        draw(Particle.DRIP_LAVA, res, 1);
+        draw(Particle.DRIP_WATER, res, 1);
 
         DMatrix3 inverse = new DMatrix3(n[0]);
         scale(-2, inverse);
         addEquals(inverse, position[0]);
 
-        draw(Particle.DRIP_LAVA, inverse, 1);
+        draw(Particle.DRIP_WATER, inverse, 1);
     }
 }
