@@ -19,7 +19,7 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
 
     final double theta = 0.2 * Math.PI;
 
-    final double R = 0.7;
+    final double R = 0.4;
 
     final CraftArrow arrow;
 
@@ -64,14 +64,14 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
         n[0] = rotateAboutVector(n[0], direction[0], theta);
 
         DMatrix3 res = new DMatrix3(position[0]);
-        addEquals(res, direction[0]);
+        addEquals(res, n[0]);
 
-        draw(Particle.DRIP_LAVA, position[0], 1);
+        draw(Particle.DRIP_LAVA, res, 1);
 
         DMatrix3 inverse = new DMatrix3(n[0]);
         scale(-2, inverse);
         addEquals(inverse, position[0]);
 
-        draw(Particle.DRIP_WATER, inverse, 1);
+        draw(Particle.DRIP_LAVA, inverse, 1);
     }
 }

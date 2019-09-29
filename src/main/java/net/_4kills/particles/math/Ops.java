@@ -57,11 +57,12 @@ public abstract class Ops {
         //rotated = multiply(multiply(multiply(multiply(multiply(Txz_T, Tz_T),Rz), Tz), Txz), rotated);
         //rotated = multiply(multiply(multiply(multiply(Txz_T, Tz_T), Rz), Tz), rotated);
         //rotated = multiply(Txz_T, Tz_T, Rz, Tz, Txz, rotated);
-        rotated = multiply(Tz_T, Rz, Tz, rotated);
-        DMatrix3x3 Ry = MatrixConstructor.Ry(-Math.PI / 4);
+        //rotated = multiply(Tz, Rz, Tz_T, rotated);
+        DMatrix3x3 Ry = MatrixConstructor.Ry(Math.atan(stator.a1 / stator.a3));
         DMatrix3x3 RyT = new DMatrix3x3();
         transpose(Ry, RyT);
-        //rotated = multiply(RyT, Rz, Ry, rotated);
+        rotated = multiply(Ry, Rz, RyT, rotated);
+        rotated.print();
 
         rotor.a1 = rotated.a11;
         rotor.a2 = rotated.a21;
