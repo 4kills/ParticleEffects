@@ -2,8 +2,9 @@ package net._4kills.particles.math;
 
 import org.ejml.data.DMatrix3;
 import org.ejml.data.DMatrix3x3;
-
-import java.util.Arrays;
+import org.ejml.dense.fixed.CommonOps_DDF3;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.ops.CommonOps_BDRM;
 
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
