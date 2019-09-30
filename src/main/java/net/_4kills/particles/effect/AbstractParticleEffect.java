@@ -1,6 +1,7 @@
 package net._4kills.particles.effect;
 
 import com.comphenix.protocol.wrappers.WrappedParticle;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;

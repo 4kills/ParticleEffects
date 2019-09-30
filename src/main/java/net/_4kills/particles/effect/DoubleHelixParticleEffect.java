@@ -2,8 +2,8 @@ package net._4kills.particles.effect;
 
 import com.sun.istack.internal.NotNull;
 import net._4kills.particles.util.Conversion;
+import org.bukkit.Bukkit;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftArrow;
 import org.bukkit.plugin.Plugin;
 import org.ejml.data.DMatrix3;
@@ -16,36 +16,100 @@ import java.util.List;
 import static net._4kills.particles.math.Ops.*;
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
-public class DoubleHelixParticleEffect extends AbstractParticleEffect {
+public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
 
-    final DMatrix3[] direction = new DMatrix3[1];
-    final List<DMatrix3> position = new LinkedList<DMatrix3>();
-    final DMatrix3[] n = new DMatrix3[1];
-    final CraftArrow arrow;
+    private final DMatrix3[] direction = new DMatrix3[1];
+    private final List<DMatrix3> position = new LinkedList<DMatrix3>();
+    private final DMatrix3[] n = new DMatrix3[1];
+    private final CraftArrow arrow;
 
-    final Particle particleType;
-    final double theta; //0.35 * Math.PI;
-    final double R;// = 0.3;
-    final int particleDensity;// = 2;
+    private final Particle particleType;
+    private final double theta;
+    private final double R;
+    private final int particleDensity;
 
-    final Particle.DustOptions data;
+    private final Particle.DustOptions data;
+
+    public static final double THETA = 0.3 * Math.PI;
+    public static final double RADIUS = 0.35;
+    public static final int PARTICLE_DENSITY = 2;
 
     /**
      * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
      * <br>For special particles refer to the ParticleType-constructors.
+     * <br>For default values refer to the class-constants.
+     * <br>Sends to all online players.
+     * </p>
+     *
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     * @param color The color of the created (redstone-type) particles.
+     * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
+     *                        <br>BEWARE: additional computing power required.
+     * @param particleSize Allows specifying the size of RGB-particles. Default is 1
+     */
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull CraftArrow arrow, @NotNull Color color,
+                                     int particleDensity, float particleSize) {
+        this(Bukkit.getOnlinePlayers(), plugin, arrow, color, THETA, RADIUS, particleDensity, particleSize); }
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For special particles refer to the ParticleType-constructors.
+     * <br>For default values refer to the class-constants.
+     * <br>Sends to all online players.
+     * </p>
+     *
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     * @param color The color of the created (redstone-type) particles.
+     * @param theta The angle of spin per tick in RADIANS. Low angle = tight helix, high angle = stretched helix
+     * @param radius The radius of rotation about the arrow trail. High radius = widened helix
+     * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
+     *                        <br>BEWARE: additional computing power required.
+     * @param particleSize Allows specifying the size of RGB-particles. Default is 1
+     */
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull CraftArrow arrow, @NotNull Color color,
+                                     double theta, double radius, int particleDensity, float particleSize) {
+        this(Bukkit.getOnlinePlayers(), plugin, arrow, color, theta, radius, particleDensity, particleSize); }
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For special particles refer to the ParticleType-constructors.
+     * <br>For default values refer to the class-constants.
      * </p>
      *
      * @param toPlayers Players to send particles to.
      * @param plugin Plugin form which to send particles.
      * @param arrow The arrow the helix will spin around.
-     * @param color The color of the created (redstone-type) particles. 
-     * @param theta The angle of spin per tick in RADIANS. Low angle = tight helix, high angle = stretched helix
-     * @param radius The radius of rotation about the arrow trail. High radius = widened helix
-     * @param particleDensity Amount of particles on the helix. Default is 1. Value of 2 = 2 x particles etc.
+     * @param color The color of the created (redstone-type) particles.
+     * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
+     *                        <br>BEWARE: additional computing power required.
+     * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
     public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
                                      @NotNull Plugin plugin, @NotNull CraftArrow arrow, @NotNull Color color,
-                                     double theta, double radius, int particleDensity) {
+                                     int particleDensity, float particleSize) {
+        this(toPlayers, plugin, arrow, color, THETA, RADIUS, particleDensity, particleSize); }
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For special particles refer to the ParticleType-constructors.
+     * <br>For default values refer to the class-constants.
+     * </p>
+     *
+     * @param toPlayers Players to send particles to.
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     * @param color The color of the created (redstone-type) particles.
+     * @param theta The angle of spin per tick in RADIANS. Low angle = tight helix, high angle = stretched helix
+     * @param radius The radius of rotation about the arrow trail. High radius = widened helix
+     * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
+     *                        <br>BEWARE: additional computing power required.
+     * @param particleSize Allows specifying the size of RGB-particles. Default is 1
+     */
+    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull Plugin plugin, @NotNull CraftArrow arrow, @NotNull Color color,
+                                     double theta, double radius, int particleDensity, float particleSize) {
         super(toPlayers, plugin);
         this.arrow = arrow;
         this.particleType = Particle.REDSTONE;
@@ -53,22 +117,97 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this.R = radius;
         this.particleDensity = particleDensity;
 
-        data = new Particle.DustOptions(color, 1);
+        data = new Particle.DustOptions(color, particleSize);
 
         init();
     }
-
-    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin, @NotNull CraftArrow arrow) {
-        this(toPlayers, plugin, arrow, Particle.REDSTONE, 0.35 * Math.PI, 0.3, 2);
-        Particle.DustOptions part = new Particle.DustOptions( Color.fromRGB(70, 70, 70), 1);
-    }
-
 
 
     /**
      * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
      * <br>For RGB-colored particles refer to the Color-constructors.
+     * <br>For default values refer to the class-constants.
+     * <br>Sends to all online players.
+     * </p>
+     *
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     */
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull CraftArrow arrow) {
+        this(plugin, arrow, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For RGB-colored particles refer to the Color-constructors.
+     * <br>For default values refer to the class-constants.
+     * <br>Sends to all online players.
+     * </p>
+     *
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     * @param particleType The displayed particle. For RGB particles refer to the overload with param Color
+     * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
+     *                        <br>BEWARE: additional computing power required.
+     */
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin,@NotNull  CraftArrow arrow, @NotNull Particle particleType,
+                                     int particleDensity) {
+        this(Bukkit.getOnlinePlayers(), plugin, arrow, particleType, THETA, RADIUS, particleDensity);    }
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For RGB-colored particles refer to the Color-constructors.
+     * <br>For default values refer to the class-constants.
+     * <br>Sends to all online players.
+     * </p>
+     *
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     * @param particleType The displayed particle. For RGB particles refer to the overload with param Color
+     * @param theta The angle of spin per tick in RADIANS. Low angle = tight helix, high angle = stretched helix
+     * @param radius The radius of rotation about the arrow trail. High radius = widened helix
+     * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
+     *                        <br>BEWARE: additional computing power required.
+     */
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin,@NotNull  CraftArrow arrow, @NotNull Particle particleType,
+                                     double theta, double radius, int particleDensity) {
+        this(Bukkit.getOnlinePlayers(), plugin, arrow, particleType, theta, radius, particleDensity);    }
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For RGB-colored particles refer to the Color-constructors.
+     * <br>For default values refer to the class-constants.
+     * </p>
+     *
+     * @param toPlayers Players to send particles to.
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     */
+    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull Plugin plugin, @NotNull CraftArrow arrow) {
+        this(toPlayers, plugin, arrow, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For RGB-colored particles refer to the Color-constructors.
+     * <br>For default values refer to the class-constants
+     * </p>
+     *
+     * @param toPlayers Players to send particles to.
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     * @param particleType The displayed particle. For RGB particles refer to the overload with param Color
+     * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
+     *                        <br>BEWARE: additional computing power required.
+     */
+    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull Plugin plugin,@NotNull  CraftArrow arrow, @NotNull Particle particleType,
+                                     int particleDensity) {
+    this(toPlayers, plugin, arrow, particleType, THETA, RADIUS, particleDensity);      }
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For RGB-colored particles refer to the Color-constructors.
+     * <br>For default values refer to the class-constants.
      * </p>
      *
      * @param toPlayers Players to send particles to.
@@ -77,7 +216,8 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleType The displayed particle. For RGB particles refer to the overload with param Color
      * @param theta The angle of spin per tick in RADIANS. Low angle = tight helix, high angle = stretched helix
      * @param radius The radius of rotation about the arrow trail. High radius = widened helix
-     * @param particleDensity Amount of particles on the helix. Default is 1. Value of 2 = 2 x particles etc.
+     * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
+     *                        <br>BEWARE: additional computing power required.
      */
     public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
                                      @NotNull Plugin plugin,@NotNull  CraftArrow arrow, @NotNull Particle particleType,
