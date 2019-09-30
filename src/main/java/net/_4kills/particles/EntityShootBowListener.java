@@ -2,6 +2,7 @@ package net._4kills.particles;
 
 import net._4kills.particles.effect.DoubleHelixParticleEffect;
 import org.bukkit.Bukkit;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftArrow;
 import org.bukkit.entity.Entity;
@@ -26,6 +27,7 @@ public class EntityShootBowListener implements Listener {
         if (!(entity instanceof CraftArrow)) return;
         final CraftArrow arrow = (CraftArrow) entity;
         final World world = arrow.getWorld();
+        //world.spawnParticle(Particle.REDSTONE, arrow.getLocation(), 1, 0.1, 0.1, 0.1, );
 
         new DoubleHelixParticleEffect(Bukkit.getOnlinePlayers(), plugin, arrow );
     }
