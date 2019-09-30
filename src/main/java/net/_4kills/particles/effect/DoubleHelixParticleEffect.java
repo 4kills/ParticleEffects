@@ -1,7 +1,9 @@
 package net._4kills.particles.effect;
 
+import com.sun.istack.internal.NotNull;
 import net._4kills.particles.util.Conversion;
 import org.bukkit.Particle;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftArrow;
 import org.bukkit.plugin.Plugin;
 import org.ejml.data.DMatrix3;
@@ -26,25 +28,60 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
     final double R;// = 0.3;
     final int particleDensity;// = 2;
 
-    public DoubleHelixParticleEffect(Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     Plugin plugin, CraftArrow arrow) {
-        this(toPlayers, plugin, arrow, Particle.DRIP_WATER, 0.35 * Math.PI, 0.3, 2);
+    final Particle.DustOptions data;
+
+    /**
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For special particles refer to the ParticleType-constructors.
+     * </p>
+     *
+     * @param toPlayers Players to send particles to.
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     * @param color The color of the created (redstone-type) particles. 
+     * @param theta The angle of spin per tick in RADIANS. Low angle = tight helix, high angle = stretched helix
+     * @param radius The radius of rotation about the arrow trail. High radius = widened helix
+     * @param particleDensity Amount of particles on the helix. Default is 1. Value of 2 = 2 x particles etc.
+     */
+    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull Plugin plugin, @NotNull CraftArrow arrow, @NotNull Color color,
+                                     double theta, double radius, int particleDensity) {
+        super(toPlayers, plugin);
+        this.arrow = arrow;
+        this.particleType = Particle.REDSTONE;
+        this.theta = theta;
+        this.R = radius;
+        this.particleDensity = particleDensity;
+
+        data = new Particle.DustOptions(color, 1);
+
+        init();
+    }
+
+    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull Plugin plugin, @NotNull CraftArrow arrow) {
+        this(toPlayers, plugin, arrow, Particle.REDSTONE, 0.35 * Math.PI, 0.3, 2);
         Particle.DustOptions part = new Particle.DustOptions( Color.fromRGB(70, 70, 70), 1);
     }
 
+
+
     /**
-     * <p>Performs the following operation:<br>
-     * <br>
-     * a = a + b <br>
-     * a<sub>i</sub> = a<sub>i</sub> + b<sub>i</sub> <br>
+     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <br>For RGB-colored particles refer to the Color-constructors.
      * </p>
      *
-     * @param a A Vector. Modified.
-     * @param b A Vector. Not modified.
+     * @param toPlayers Players to send particles to.
+     * @param plugin Plugin form which to send particles.
+     * @param arrow The arrow the helix will spin around.
+     * @param particleType The displayed particle. For RGB particles refer to the overload with param Color
+     * @param theta The angle of spin per tick in RADIANS. Low angle = tight helix, high angle = stretched helix
+     * @param radius The radius of rotation about the arrow trail. High radius = widened helix
+     * @param particleDensity Amount of particles on the helix. Default is 1. Value of 2 = 2 x particles etc.
      */
-    public DoubleHelixParticleEffect(Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     Plugin plugin, CraftArrow arrow, Particle particleType, double theta,
-                                     double radius, int particleDensity) {
+    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull Plugin plugin,@NotNull  CraftArrow arrow, @NotNull Particle particleType,
+                                     double theta, double radius, int particleDensity) {
         super(toPlayers, plugin);
         this.arrow = arrow;
         this.particleType = particleType;
@@ -52,6 +89,17 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this.R = radius;
         this.particleDensity = particleDensity;
 
+        if(particleType == Particle.REDSTONE){
+            data = new Particle.DustOptions(Color.RED, 1);
+            init();
+            return;
+        }
+
+        data = null;
+        init();
+    }
+
+    private void init() {
         direction[0] = Conversion.bukkitVecToMatrix(arrow.getLocation().getDirection());
         position.add(Conversion.bukkitVecToMatrix(arrow.getLocation()));
         n[0] = crossProduct(direction[0], position.get(position.size()-1));
@@ -81,14 +129,13 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
         addEquals(res, n[0]);
 
         additionalParticles(particleDensity, position.get(position.size()-1), pos);
-
-        draw(particleType, res, 1);
+        draw(particleType, res, 1, data);
 
         DMatrix3 inverse = new DMatrix3(n[0]);
         scale(-2, inverse);
         addEquals(inverse, pos);
 
-        draw(particleType, inverse, 1);
+        draw(particleType, inverse, 1, data);
 
         position.add(pos);
         if(position.size() > 5) position.remove(0);
@@ -120,12 +167,12 @@ public class DoubleHelixParticleEffect extends AbstractParticleEffect {
 
             DMatrix3 spawn = new DMatrix3(pos);
             addEquals(spawn, nor);
-            draw(particleType, spawn, 1);
+            draw(particleType, spawn, 1, data);
 
             DMatrix3 inverse = new DMatrix3(nor);
             scale(-2, inverse);
             addEquals(inverse, pos);
-            draw(particleType, inverse, 1);
+            draw(particleType, inverse, 1, data);
         }
     }
 }
