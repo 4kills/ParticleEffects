@@ -35,7 +35,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
     public static final int PARTICLE_DENSITY = 2;
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For special particles refer to the ParticleType-constructors.
      * <br>For default values refer to the class-constants.
      * <br>Sends to all online players.
@@ -53,7 +53,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, color, THETA, RADIUS, particleDensity, particleSize); }
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For special particles refer to the ParticleType-constructors.
      * <br>For default values refer to the class-constants.
      * <br>Sends to all online players.
@@ -74,7 +74,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, color, theta, radius, particleDensity, particleSize); }
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For special particles refer to the ParticleType-constructors.
      * <br>For default values refer to the class-constants.
      * </p>
@@ -93,7 +93,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this(toPlayers, plugin, projectile, color, THETA, RADIUS, particleDensity, particleSize); }
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For special particles refer to the ParticleType-constructors.
      * <br>For default values refer to the class-constants.
      * </p>
@@ -125,7 +125,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
 
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For RGB-colored particles refer to the Color-constructors.
      * <br>For default values refer to the class-constants.
      * <br>Sends to all online players.
@@ -138,7 +138,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this(plugin, projectile, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For RGB-colored particles refer to the Color-constructors.
      * <br>For default values refer to the class-constants.
      * <br>Sends to all online players.
@@ -155,7 +155,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, particleType, THETA, RADIUS, particleDensity);    }
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For RGB-colored particles refer to the Color-constructors.
      * <br>For default values refer to the class-constants.
      * <br>Sends to all online players.
@@ -175,7 +175,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, particleType, theta, radius, particleDensity);    }
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For RGB-colored particles refer to the Color-constructors.
      * <br>For default values refer to the class-constants.
      * </p>
@@ -189,7 +189,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
         this(toPlayers, plugin, projectile, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For RGB-colored particles refer to the Color-constructors.
      * <br>For default values refer to the class-constants
      * </p>
@@ -207,7 +207,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
     this(toPlayers, plugin, projectile, particleType, THETA, RADIUS, particleDensity);      }
 
     /**
-     * <p>Constructs a double helix particle effect about an arrow upon calling the constructor.
+     * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
      * <br>For RGB-colored particles refer to the Color-constructors.
      * <br>For default values refer to the class-constants.
      * </p>
