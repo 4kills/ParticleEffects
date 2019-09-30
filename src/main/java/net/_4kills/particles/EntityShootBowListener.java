@@ -30,6 +30,6 @@ public class EntityShootBowListener implements Listener {
         final CraftArrow arrow = (CraftArrow) entity;
         final World world = arrow.getWorld();
 
-        new DoubleHelixParticleEffect(plugin, arrow, Color.fromRGB(0x42f5f5), 2, 1);
+        new DoubleHelixParticleEffect(plugin, arrow, Color.ORANGE, DoubleHelixParticleEffect.THETA, 0.6, 2, 1.5f);
     }
 }
