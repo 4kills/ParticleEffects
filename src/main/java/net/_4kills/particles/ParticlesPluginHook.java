@@ -8,6 +8,7 @@ public final class ParticlesPluginHook extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         EntityShootBowListener.register(this);
+        PlayerInteractEntityListener.register(this);
     }
 
     @Override
