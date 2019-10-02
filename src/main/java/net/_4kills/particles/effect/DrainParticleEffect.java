@@ -52,7 +52,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         if(dot(initial, axis) != 0) {
             double angle = Ops.angleBetween(initial, axis);
             angle = angle - Math.PI / 2;
-            if(rotAx.a3 < 0 ) angle = -angle;
+            //if(rotAx.a3 < 0 ) angle = -angle;
             initial = Ops.rotateAboutVector(initial, rotAx, angle);
         }
         System.out.println(toDegrees(Ops.angleBetween(initial, axis)));
