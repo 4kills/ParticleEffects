@@ -1,14 +1,10 @@
 package net._4kills.particles;
 
-import net._4kills.particles.effect.LifeDrainParticleEffect;
+import net._4kills.particles.effect.DrainParticleEffect;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class PlayerInteractEntityListener implements Listener {
     private ParticlesPluginHook plugin;
@@ -23,7 +19,8 @@ public class PlayerInteractEntityListener implements Listener {
 
     @EventHandler
     public void onOpenShop(PlayerInteractEntityEvent event) {
-        new LifeDrainParticleEffect(Bukkit.getOnlinePlayers(), plugin, event.getPlayer(), event.getRightClicked());
+        event.setCancelled(true);
+        new DrainParticleEffect(Bukkit.getOnlinePlayers(), plugin, event.getPlayer(), event.getRightClicked());
         /*if (event.getRightClicked().getType() != EntityType.VILLAGER) return;
 
         event.setCancelled(true);
