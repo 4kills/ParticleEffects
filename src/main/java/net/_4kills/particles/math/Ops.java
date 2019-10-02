@@ -46,7 +46,8 @@ public abstract class Ops {
         rotated.a21 = rotor.a2;
         rotated.a31 = rotor.a3;
 
-        if(stator.a3 < 0 ) theta = -theta; //ensures that stator is rotated towards positive z-axis, not negative
+        if(stator.a3 < 0 ) theta = -theta; //ensures that rotation is always in the same orientation,
+        // even if stator is rotated towards negative z-axis
 
         DMatrix3x3 Rz = MatrixConstructor.Rz(theta);
 
