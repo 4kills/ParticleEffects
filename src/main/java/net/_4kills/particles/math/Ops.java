@@ -60,11 +60,7 @@ public abstract class Ops {
 
         rotated = multiply(RzToPlane, Ry, Rz, RyT, RzToPlaneT, rotated);
 
-        rotor.a1 = rotated.a11;
-        rotor.a2 = rotated.a21;
-        rotor.a3 = rotated.a31;
-
-        return rotor;
+        return new DMatrix3(rotated.a11, rotated.a21, rotated.a31);
     }
 
     // Allows mulitple multiplicatons. Returns identity matrix if args are 0

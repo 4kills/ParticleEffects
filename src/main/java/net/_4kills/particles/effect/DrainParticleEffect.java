@@ -62,6 +62,8 @@ public class DrainParticleEffect extends AbstractParticleEffect {
 
         angle = 2*Math.PI / rayCount; 
         initial = Ops.rotateAboutVector(initial, axis, angle/2);
+        System.out.println(dot(initial, axis));
+
         scale(20, initial);
         System.out.println(dot(initial, axis));
         vertices.add(initial.copy());
