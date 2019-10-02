@@ -14,6 +14,7 @@ import java.util.List;
 import net._4kills.particles.math.Ops;
 import org.ejml.data.DMatrix3x3;
 
+import static java.lang.Math.toDegrees;
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
 public class DrainParticleEffect extends AbstractParticleEffect {
@@ -58,14 +59,17 @@ public class DrainParticleEffect extends AbstractParticleEffect {
             angle = +angle - Math.PI / 2;
             initial = Ops.rotateAboutVector(initial, rotAx, angle);
         }
-        System.out.println(dot(initial, axis));
+        System.out.println("should be 90");
+        System.out.println(toDegrees(Ops.angleBetween(initial, axis)));
 
-        angle = 2*Math.PI / rayCount; 
+        angle = 2*Math.PI / rayCount;
+        System.out.println("interesting");
+
         initial = Ops.rotateAboutVector(initial, axis, angle/2);
-        System.out.println(dot(initial, axis));
+
+        System.out.println(toDegrees(Ops.angleBetween(initial, axis)));
 
         scale(20, initial);
-        System.out.println(dot(initial, axis));
         vertices.add(initial.copy());
         for (int i = 0; i < rayCount-1; i++) {
             DMatrix3 ray = Ops.rotateAboutVector(vertices.get(i).copy(), axis, angle).copy();

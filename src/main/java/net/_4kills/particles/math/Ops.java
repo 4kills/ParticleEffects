@@ -3,6 +3,7 @@ package net._4kills.particles.math;
 import org.ejml.data.DMatrix3;
 import org.ejml.data.DMatrix3x3;
 
+import static java.lang.Math.toDegrees;
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
 public abstract class Ops {
@@ -41,10 +42,9 @@ public abstract class Ops {
     }
 
     public static DMatrix3 rotateAboutVector(DMatrix3 rotor, DMatrix3 stator, double theta) {
-        DMatrix3x3 rotated = new DMatrix3x3();
-        rotated.a11 = rotor.a1;
-        rotated.a21 = rotor.a2;
-        rotated.a31 = rotor.a3;
+        DMatrix3 r = new DMatrix3(rotor);
+
+        DMatrix3 s = new DMatrix3(stator);
 
         if(stator.a3 < 0 ) theta = -theta; //ensures that rotation is always in the same orientation,
         // even if stator is rotated towards negative z-axis
@@ -54,22 +54,34 @@ public abstract class Ops {
         DMatrix3x3 RzToPlane = MatrixConstructor.Rz(Math.atan(stator.a2 / stator.a1));
         DMatrix3x3 RzToPlaneT = new DMatrix3x3(RzToPlane);
         transpose(RzToPlaneT);
-        DMatrix3x3 Ry = MatrixConstructor.Ry(Math.atan(stator.a1 / stator.a3));
+        s = multiplyTwo(RzToPlaneT, s);
+        DMatrix3x3 Ry = MatrixConstructor.Ry(Math.atan(s.a1 / s.a3));
         DMatrix3x3 RyT = new DMatrix3x3(Ry);
         transpose(RyT);
 
-        rotated = multiply(RzToPlane, Ry, Rz, RyT, RzToPlaneT, rotated);
-
-        return new DMatrix3(rotated.a11, rotated.a21, rotated.a31);
+        r = multiplyTwo(RzToPlaneT, r);
+        r = multiplyTwo(RyT, r);
+        r = multiplyTwo(Rz, r);
+        r = multiplyTwo(Ry, r);
+        r = multiplyTwo(RzToPlane, r);
+        return r;
     }
 
-    // Allows mulitple multiplicatons. Returns identity matrix if args are 0
     static DMatrix3x3 multiply(DMatrix3x3 ...m) {
         DMatrix3x3 res = MatrixConstructor.identity3x3Matrix();
         for (int i = 0; i < m.length; i++) {
             res = multiplyTwo(res, m[i]);
         }
         return res;
+    }
+
+    private static DMatrix3 multiplyTwo (DMatrix3x3 a, DMatrix3 b) {
+        DMatrix3x3 B = new DMatrix3x3();
+        B.a11 = b.a1;
+        B.a21 = b.a2;
+        B.a31 = b.a3;
+        B = multiplyTwo(a, B);
+        return new DMatrix3(B.a11, B.a21, B.a31);
     }
 
     private static DMatrix3x3 multiplyTwo (DMatrix3x3 a, DMatrix3x3 b){
