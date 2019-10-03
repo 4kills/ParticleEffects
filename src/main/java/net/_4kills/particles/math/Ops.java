@@ -1,5 +1,6 @@
 package net._4kills.particles.math;
 
+import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrix3;
 import org.ejml.data.DMatrix3x3;
 
@@ -18,19 +19,36 @@ public abstract class Ops {
     public static DMatrix3 makeUnitVector(DMatrix3 vec) {
         double l = calcLength(vec);
         if (l == 1) return vec;
-        if (l == 0) throw new RuntimeException("operation failed: argument vec is zero vec");
+        if (l == 0) throw new RuntimeException("operation failed: argument vector is zero vector");
         l = 1 / l;
         DMatrix3 m = new DMatrix3(vec);
         scale(l, m);
         return m;
     }
 
+    public static boolean isApproxEqual(DMatrix a, DMatrix b) {
+        if (a.getType() != b.getType()) return false;
+        for (int i = 0; i < a.getNumRows(); i++) {
+            for (int j = 0; j < a.getNumCols(); j++) {
+                double diff = a.get(i, j) - b.get(i,j);
+                double boundary = Math.min(Math.abs(0.00001*a.get(i,j)), Math.abs(0.00001*b.get(i,j)));
+                if(-boundary <= diff && diff <= boundary) continue;
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static DMatrix3 crossProduct(DMatrix3 u, DMatrix3 v) {
-        DMatrix3 m = new DMatrix3();
-        m.a1 = u.a2 * v.a3 - u.a3 * v.a2;
-        m.a2 = u.a3 * v.a1 - u.a1 * v.a3;
-        m.a3 = u.a1 * v.a2 - u.a2 * v.a1;
-        return m;
+        DMatrix3 n = new DMatrix3();
+
+        n.a1 = u.a2 * v.a3 - u.a3 * v.a2;
+        n.a2 = u.a3 * v.a1 - u.a1 * v.a3;
+        n.a3 = u.a1 * v.a2 - u.a2 * v.a1;
+
+        if(isApproxEqual(n, new DMatrix3(0,0,0))) throw new RuntimeException("Argument(s) is/are zero vector(s)" +
+                "or arguments are collinear");
+        return n;
     }
 
     public static DMatrix3 midpointFormula(DMatrix3 u, DMatrix3 v) {

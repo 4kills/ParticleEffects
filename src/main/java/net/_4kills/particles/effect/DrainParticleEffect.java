@@ -1,6 +1,7 @@
 package net._4kills.particles.effect;
 
 import net._4kills.particles.util.Conversion;
+import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,21 +21,24 @@ import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
 public class DrainParticleEffect extends AbstractParticleEffect {
 
-    private final DMatrix3 axis, entityLoc, progressor;
+    private final DMatrix3 axis, entityLoc, progressor, prevLoc;
+    private final Player player;
     private final int rayCount;
     private double[] progress = new double[1];
     private final List<DMatrix3> vertices = new LinkedList<>();
 
-    public static final int RAY_COUNT = 5;
+    public static final int RAY_COUNT = 6;
+    private static final double TO_DESIRED_HEIGHT = 0.2;
+    private static final double EYE_HEIGHT = 1.62;
+
 
     public DrainParticleEffect(Collection<? extends Player> toPlayers, Plugin plugin, Player player, Entity entity,
                                double effectDuration)
     {
         super(toPlayers, plugin);
-        final double EYE_HEIGHT = 1.62;
-        DMatrix3 locP = Conversion.bukkitVecToMatrix(player.getLocation());
+        this.player = player;
+        DMatrix3 locP = getPlayerLoc();
         DMatrix3 locE = Conversion.bukkitVecToMatrix(entity.getLocation());
-        addEquals(locP, new DMatrix3(0, EYE_HEIGHT-0.2, 0));
         addEquals(locE, new DMatrix3(0, entity.getHeight()/2, 0));
         scale(-1, locE);
         addEquals(locP, locE);
@@ -44,6 +48,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         progressor = new DMatrix3(axis);
         scale(1/(effectDuration*20), progressor);
         rayCount = RAY_COUNT; // must be at least 1;
+        prevLoc = new DMatrix3(entityLoc);
 
         init();
     }
@@ -51,7 +56,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
     private double definingFunction(double d){
         final double maxDistance = 4.4;
         final double scale = Ops.calcLength(axis) / maxDistance;
-        return (8 / scale) * d * Math.pow(4, -d/scale) -0.1 ;
+        return (0.7 / scale) * d * Math.pow(4, -d/scale + 1.5) - 0.05 * scale;
     }
 
     private void init() {
@@ -69,37 +74,76 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         initial = Ops.rotateAboutVector(initial, axis, angle/2);
         vertices.add(initial.copy());
         for (int i = 0; i < rayCount-1; i++) {
-            DMatrix3 ray = Ops.rotateAboutVector(vertices.get(i).copy(), axis, angle).copy();
+            DMatrix3 ray = Ops.rotateAboutVector(vertices.get(i), axis, angle).copy();
             vertices.add(ray);
         }
 
         vertices.forEach(vec -> {
             DMatrix3 vector = new DMatrix3(vec);
-            scale(0.1, vector);
+            scale(0.3, vector);
             addEquals(vector, entityLoc);
-            draw(Particle.DRIP_LAVA, vector, 1, null);});
+            draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(Color.fromRGB(0x00fff2), 1));});
 
         progress[0] = Ops.calcLength(progressor);
-
         this.runTaskTimer(plugin,1, 1);
+    }
+
+    private DMatrix3 getPlayerLoc() {
+        DMatrix3 playerLoc = Conversion.bukkitVecToMatrix(player.getLocation());
+        playerLoc.a2 = playerLoc.a2 + EYE_HEIGHT - TO_DESIRED_HEIGHT;
+        return playerLoc;
+    }
+
+    private boolean handleMovement() {
+        addEquals(prevLoc, progressor);
+        DMatrix3 newProg = new DMatrix3(prevLoc);
+        scale(-1, newProg);
+        add(getPlayerLoc(), newProg, newProg);
+        try {
+            newProg = Ops.makeUnitVector(newProg);
+            scale(Ops.calcLength(progressor), newProg);
+        } catch (Exception e){
+            return false;
+        }
+        if(Ops.isApproxEqual(progressor, newProg)) return true;
+
+        DMatrix3 ax = Ops.crossProduct(progressor, newProg);
+        double phi = Ops.angleBetween(progressor, newProg);
+        double scalar = dot(Ops.rotateAboutVector(vertices.get(0), ax, phi), newProg);
+        if(!(-0.01 < scalar && scalar < 0.01)) phi = -phi;
+        for (int i = 0; i < vertices.size(); i++)
+            vertices.set(i,Ops.rotateAboutVector(vertices.get(i), ax, phi));
+        progressor.set(newProg);
+        return true;
     }
 
     @Override
     public void run() {
-        double r = definingFunction(progress[0]);
+        if (progress[0] >= Ops.calcLength(axis)) {
+            vertices.retainAll(vertices.subList(0,1));
+            double l = Ops.calcLength(progressor);
+            progressor.set(Ops.makeUnitVector(progressor));
+            scale(1.05 * l, progressor);
+        }
+
+        if(!handleMovement()) this.cancel();
+
+        for (int i = 0; i < vertices.size(); i++)
+            vertices.set(i,Ops.rotateAboutVector(vertices.get(i), axis, 0.05 * Math.PI));
+        double r = Math.max(definingFunction(progress[0]), 0.005);
 
         vertices.forEach(vec -> {
             DMatrix3 vector = new DMatrix3(vec);
             scale(r, vector);
-
-            DMatrix3 prog = new DMatrix3(progressor);
-            scale(progress[0] / Ops.calcLength(progressor), prog);
-            addEquals(vector, prog);
-            addEquals(vector, entityLoc);
-            draw(Particle.DRIP_LAVA, vector, 1, null);
+            addEquals(vector, prevLoc);
+            draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(Color.fromRGB(0x00fff2), 1));
         });
 
         progress[0] += Ops.calcLength(progressor);
-        if (progress[0] == Ops.calcLength(axis)) this.cancel();
+
+        DMatrix3 playerLoc = getPlayerLoc();
+        scale(-1, playerLoc);
+        addEquals(playerLoc, prevLoc);
+        if(Ops.calcLength(playerLoc) < 0.3) this.cancel();
     }
 }
