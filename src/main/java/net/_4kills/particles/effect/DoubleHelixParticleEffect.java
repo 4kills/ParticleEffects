@@ -4,7 +4,7 @@ import com.sun.istack.internal.NotNull;
 import net._4kills.particles.util.Conversion;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_13_R2.entity.AbstractProjectile;
+import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.Plugin;
 import org.ejml.data.DMatrix3;
 import org.bukkit.Color;
@@ -21,7 +21,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
     private final DMatrix3[] direction = new DMatrix3[1];
     private final List<DMatrix3> position = new LinkedList<DMatrix3>();
     private final DMatrix3[] n = new DMatrix3[1];
-    private final AbstractProjectile projectile;
+    private final Projectile projectile;
 
     private final Particle particleType;
     private final double theta;
@@ -48,7 +48,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      *                        <br>BEWARE: additional computing power required.
      * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull AbstractProjectile projectile,
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull Projectile projectile,
                                      @NotNull Color color,  int particleDensity, float particleSize) {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, color, THETA, RADIUS, particleDensity, particleSize); }
 
@@ -68,7 +68,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      *                        <br>BEWARE: additional computing power required.
      * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull AbstractProjectile projectile,
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull Projectile projectile,
                                      @NotNull Color color,
                                      double theta, double radius, int particleDensity, float particleSize) {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, color, theta, radius, particleDensity, particleSize); }
@@ -88,7 +88,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
     public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin, @NotNull AbstractProjectile projectile,
+                                     @NotNull Plugin plugin, @NotNull Projectile projectile,
                                      @NotNull Color color, int particleDensity, float particleSize) {
         this(toPlayers, plugin, projectile, color, THETA, RADIUS, particleDensity, particleSize); }
 
@@ -109,7 +109,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
     public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin, @NotNull AbstractProjectile projectile,
+                                     @NotNull Plugin plugin, @NotNull Projectile projectile,
                                      @NotNull Color color, double theta, double radius, int particleDensity, float particleSize) {
         super(toPlayers, plugin);
         this.projectile = projectile;
@@ -134,7 +134,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param plugin Plugin form which to send particles.
      * @param projectile The arrow the helix will spin around.
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull AbstractProjectile projectile) {
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull Projectile projectile) {
         this(plugin, projectile, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
 
     /**
@@ -150,7 +150,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
      *                        <br>BEWARE: additional computing power required.
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin,@NotNull AbstractProjectile projectile, @NotNull Particle particleType,
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin,@NotNull Projectile projectile, @NotNull Particle particleType,
                                      int particleDensity) {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, particleType, THETA, RADIUS, particleDensity);    }
 
@@ -169,7 +169,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
      *                        <br>BEWARE: additional computing power required.
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin,@NotNull AbstractProjectile projectile,
+    public DoubleHelixParticleEffect(@NotNull Plugin plugin,@NotNull Projectile projectile,
                                      @NotNull Particle particleType,
                                      double theta, double radius, int particleDensity) {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, particleType, theta, radius, particleDensity);    }
@@ -185,7 +185,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param projectile The arrow the helix will spin around.
      */
     public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin, @NotNull AbstractProjectile projectile) {
+                                     @NotNull Plugin plugin, @NotNull Projectile projectile) {
         this(toPlayers, plugin, projectile, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
 
     /**
@@ -202,7 +202,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      *                        <br>BEWARE: additional computing power required.
      */
     public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin,@NotNull AbstractProjectile projectile,
+                                     @NotNull Plugin plugin,@NotNull Projectile projectile,
                                      @NotNull Particle particleType, int particleDensity) {
     this(toPlayers, plugin, projectile, particleType, THETA, RADIUS, particleDensity);      }
 
@@ -222,7 +222,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      *                        <br>BEWARE: additional computing power required.
      */
     public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin,@NotNull AbstractProjectile projectile,
+                                     @NotNull Plugin plugin,@NotNull Projectile projectile,
                                      @NotNull Particle particleType,
                                      double theta, double radius, int particleDensity) {
         super(toPlayers, plugin);
