@@ -2,6 +2,6 @@ name: Particles
 version: ${project.version}
 depend: [ProtocolLib]
 main: net._4kills.particles.ParticlesPluginHook
-api-version: 1.13
+api-version: 1.15
 authors: [4kills]
 website: 4kills.net

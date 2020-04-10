@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="ParticleEffects:jar">
+  <artifact type="jar" name="ParticleEffectsTestPlugin:jar">
     <output-path>$PROJECT_DIR$/../MinecraftServer/plugins</output-path>
     <root id="archive" name="ParticleEffects.jar">
       <element id="module-output" name="ParticleEffects" />
@@ -12,6 +12,7 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ejml/ejml-cdense/0.37.1/ejml-cdense-0.37.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ejml/ejml-zdense/0.37.1/ejml-zdense-0.37.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ejml/ejml-all/0.37.1/ejml-all-0.37.1.jar" path-in-jar="/" />
+      <element id="module-test-output" name="ParticleEffects" />
     </root>
   </artifact>
 </component>
