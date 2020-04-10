@@ -4,7 +4,6 @@ import org.ejml.data.DMatrix;
 import org.ejml.data.DMatrix3;
 import org.ejml.data.DMatrix3x3;
 
-import static java.lang.Math.toDegrees;
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
 public abstract class Ops {

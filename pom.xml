@@ -84,7 +84,7 @@
         </dependency>
         <dependency>
             <groupId>org.ejml</groupId>
-            <artifactId>ejml-all</artifactId>
+            <artifactId>ejml-ddense</artifactId>
             <version>0.37.1</version>
         </dependency>
     </dependencies>
