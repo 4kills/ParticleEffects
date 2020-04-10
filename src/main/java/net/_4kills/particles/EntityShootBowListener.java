@@ -28,7 +28,6 @@ public class EntityShootBowListener implements Listener {
         final Entity entity = event.getProjectile();
         if (!(entity instanceof Projectile)) return;
         final Projectile arrow = (Projectile) entity;
-        final World world = arrow.getWorld();
 
         new DoubleHelixParticleEffect(plugin, arrow, Color.ORANGE, DoubleHelixParticleEffect.THETA, 0.6, 2, 1.5f);
     }
