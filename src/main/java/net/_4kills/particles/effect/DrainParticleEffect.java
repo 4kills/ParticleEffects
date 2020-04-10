@@ -33,13 +33,13 @@ public class DrainParticleEffect extends AbstractParticleEffect {
     private static final double EYE_HEIGHT = 1.62;
 
 
-    public DrainParticleEffect(Collection<? extends Player> toPlayers, Plugin plugin, Player player, Entity entity,
-                               double effectDuration)
+    public DrainParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin, final Player player, final Entity entity,
+                               final double effectDuration)
     {
         super(toPlayers, plugin);
         this.player = player;
-        DMatrix3 locP = getPlayerLoc();
-        DMatrix3 locE = Conversion.bukkitVecToMatrix(entity.getLocation());
+        final DMatrix3 locP = getPlayerLoc();
+        final DMatrix3 locE = Conversion.bukkitVecToMatrix(entity.getLocation());
         addEquals(locE, new DMatrix3(0, entity.getHeight()/2, 0));
         scale(-1, locE);
         addEquals(locP, locE);
@@ -54,7 +54,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         init();
     }
 
-    private double definingFunction(double d){
+    private double definingFunction(final double d){
         final double maxDistance = 4.4;
         final double scale = Ops.calcLength(axis) / maxDistance;
         return (0.7 / scale) * d * Math.pow(4, -d/scale + 1.5) - 0.05 * scale;
@@ -62,7 +62,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
 
     private void init() {
         DMatrix3 initial = new DMatrix3(0, 1, 0);
-        DMatrix3 rotAx = Ops.crossProduct(initial, axis);
+        final DMatrix3 rotAx = Ops.crossProduct(initial, axis);
         double angle;
         if(Ops.calcLength(rotAx) == 0) initial.set(1, 0, 0);
         if(dot(initial, axis) != 0) {
@@ -75,12 +75,12 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         initial = Ops.rotateAboutVector(initial, axis, angle/2);
         vertices.add(initial.copy());
         for (int i = 0; i < rayCount-1; i++) {
-            DMatrix3 ray = Ops.rotateAboutVector(vertices.get(i), axis, angle).copy();
+            final DMatrix3 ray = Ops.rotateAboutVector(vertices.get(i), axis, angle).copy();
             vertices.add(ray);
         }
 
         vertices.forEach(vec -> {
-            DMatrix3 vector = new DMatrix3(vec);
+            final DMatrix3 vector = new DMatrix3(vec);
             scale(0.3, vector);
             addEquals(vector, entityLoc);
             draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(Color.fromRGB(0x00fff2), 1));});
@@ -90,7 +90,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
     }
 
     private DMatrix3 getPlayerLoc() {
-        DMatrix3 playerLoc = Conversion.bukkitVecToMatrix(player.getLocation());
+        final DMatrix3 playerLoc = Conversion.bukkitVecToMatrix(player.getLocation());
         playerLoc.a2 = playerLoc.a2 + EYE_HEIGHT - TO_DESIRED_HEIGHT;
         return playerLoc;
     }
@@ -103,14 +103,14 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         try {
             newProg = Ops.makeUnitVector(newProg);
             scale(Ops.calcLength(progressor), newProg);
-        } catch (Exception e){
+        } catch (final Exception e){
             return false;
         }
         if(Ops.isApproxEqual(progressor, newProg)) return true;
 
-        DMatrix3 ax = Ops.crossProduct(progressor, newProg);
+        final DMatrix3 ax = Ops.crossProduct(progressor, newProg);
         double phi = Ops.angleBetween(progressor, newProg);
-        double scalar = dot(Ops.rotateAboutVector(vertices.get(0), ax, phi), newProg);
+        final double scalar = dot(Ops.rotateAboutVector(vertices.get(0), ax, phi), newProg);
         if(!(-0.01 < scalar && scalar < 0.01)) phi = -phi;
         for (int i = 0; i < vertices.size(); i++)
             vertices.set(i,Ops.rotateAboutVector(vertices.get(i), ax, phi));
@@ -123,8 +123,8 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         if (progress[0] >= Ops.calcLength(axis)) {
             try{
                 vertices.retainAll(vertices.subList(0,1));
-            } catch(ConcurrentModificationException ignore) { }
-            double l = Ops.calcLength(progressor);
+            } catch(final ConcurrentModificationException ignore) { }
+            final double l = Ops.calcLength(progressor);
             progressor.set(Ops.makeUnitVector(progressor));
             scale(1.05 * l, progressor);
         }
@@ -133,10 +133,10 @@ public class DrainParticleEffect extends AbstractParticleEffect {
 
         for (int i = 0; i < vertices.size(); i++)
             vertices.set(i,Ops.rotateAboutVector(vertices.get(i), axis, 0.05 * Math.PI));
-        double r = Math.max(definingFunction(progress[0]), 0.005);
+        final double r = Math.max(definingFunction(progress[0]), 0.005);
 
         vertices.forEach(vec -> {
-            DMatrix3 vector = new DMatrix3(vec);
+            final DMatrix3 vector = new DMatrix3(vec);
             scale(r, vector);
             addEquals(vector, prevLoc);
             draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(Color.fromRGB(0x00fff2), 1));
@@ -144,7 +144,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
 
         progress[0] += Ops.calcLength(progressor);
 
-        DMatrix3 playerLoc = getPlayerLoc();
+        final DMatrix3 playerLoc = getPlayerLoc();
         scale(-1, playerLoc);
         addEquals(playerLoc, prevLoc);
         if(Ops.calcLength(playerLoc) < 0.3) this.cancel();

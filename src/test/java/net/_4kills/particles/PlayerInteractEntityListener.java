@@ -9,16 +9,16 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 public class PlayerInteractEntityListener implements Listener {
     private ParticlesPluginHook plugin;
 
-    private PlayerInteractEntityListener(ParticlesPluginHook plugin) {
+    private PlayerInteractEntityListener(final ParticlesPluginHook plugin) {
         this.plugin = plugin;
     }
 
-    public static void register(ParticlesPluginHook plugin) {
+    public static void register(final ParticlesPluginHook plugin) {
         plugin.getServer().getPluginManager().registerEvents(new PlayerInteractEntityListener(plugin), plugin);
     }
 
     @EventHandler
-    public void onOpenShop(PlayerInteractEntityEvent event) {
+    public void onOpenShop(final PlayerInteractEntityEvent event) {
         event.setCancelled(true);
         new DrainParticleEffect(Bukkit.getOnlinePlayers(), plugin, event.getPlayer(), event.getRightClicked(), 0.7);
         /*if (event.getRightClicked().getType() != EntityType.VILLAGER) return;

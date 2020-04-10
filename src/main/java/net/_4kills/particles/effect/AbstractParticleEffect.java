@@ -18,16 +18,16 @@ public abstract class AbstractParticleEffect extends BukkitRunnable {
     private final Collection<? extends Player> toPlayers;
     protected final Plugin plugin;
 
-    public AbstractParticleEffect(Collection<? extends Player> toPlayers, Plugin plugin) {
+    public AbstractParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin) {
         this.toPlayers = toPlayers;
         this.plugin = plugin;
     }
 
-    protected void draw(Particle particle, DMatrix3 location, int numberOfParticles,
+    protected void draw(final Particle particle, final DMatrix3 location, final int numberOfParticles,
                         @Nullable Particle.DustOptions data) {
         // dev code for incompatible mc versions
         World world = null;
-        for (Player p : toPlayers) {
+        for (final Player p : toPlayers) {
             world = p.getWorld();
             break;
         }

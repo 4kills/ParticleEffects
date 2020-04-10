@@ -15,16 +15,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class EntityShootBowListener implements Listener {
     private ParticlesPluginHook plugin;
 
-    private EntityShootBowListener(ParticlesPluginHook plugin) {
+    private EntityShootBowListener(final ParticlesPluginHook plugin) {
         this.plugin = plugin;
     }
 
-    static void register(ParticlesPluginHook plugin) {
+    static void register(final ParticlesPluginHook plugin) {
         plugin.getServer().getPluginManager().registerEvents(new EntityShootBowListener(plugin), plugin);
     }
 
     @EventHandler
-    public void onEntityShootBowEvent(EntityShootBowEvent event) {
+    public void onEntityShootBowEvent(final EntityShootBowEvent event) {
         final Entity entity = event.getProjectile();
         if (!(entity instanceof Projectile)) return;
         final Projectile arrow = (Projectile) entity;

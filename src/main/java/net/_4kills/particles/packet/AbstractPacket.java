@@ -37,7 +37,7 @@ public abstract class AbstractPacket {
      * @param handle - handle to the raw particleeffects.packet data.
      * @param type - the particleeffects.packet type.
      */
-    protected AbstractPacket(PacketContainer handle, PacketType type) {
+    protected AbstractPacket(final PacketContainer handle, final PacketType type) {
         // Make sure we're given a valid particleeffects.packet
         if (handle == null)
             throw new IllegalArgumentException("Packet handle cannot be NULL.");
@@ -63,11 +63,11 @@ public abstract class AbstractPacket {
      * @param receiver - the receiver.
      * @throws RuntimeException If the particleeffects.packet cannot be sent.
      */
-    public void sendPacket(Player receiver) {
+    public void sendPacket(final Player receiver) {
         try {
             ProtocolLibrary.getProtocolManager().sendServerPacket(receiver,
                     getHandle());
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             throw new RuntimeException("Cannot send particleeffects.packet.", e);
         }
     }
@@ -88,11 +88,11 @@ public abstract class AbstractPacket {
      * @see #receivePacket(Player)
      */
     @Deprecated
-    public void recievePacket(Player sender) {
+    public void recievePacket(final Player sender) {
         try {
             ProtocolLibrary.getProtocolManager().recieveClientPacket(sender,
                     getHandle());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Cannot recieve particleeffects.packet.", e);
         }
     }
@@ -103,11 +103,11 @@ public abstract class AbstractPacket {
      * @param sender - the sender.
      * @throws RuntimeException if the particleeffects.packet cannot be received.
      */
-    public void receivePacket(Player sender) {
+    public void receivePacket(final Player sender) {
         try {
             ProtocolLibrary.getProtocolManager().recieveClientPacket(sender,
                     getHandle());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Cannot receive particleeffects.packet.", e);
         }
     }

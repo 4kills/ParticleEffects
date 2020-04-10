@@ -49,8 +49,8 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      *                        <br>BEWARE: additional computing power required.
      * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull Projectile projectile,
-                                     @NotNull Color color,  int particleDensity, float particleSize) {
+    public DoubleHelixParticleEffect(@NotNull final Plugin plugin, @NotNull final Projectile projectile,
+                                     @NotNull final Color color, final int particleDensity, final float particleSize) {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, color, THETA, RADIUS, particleDensity, particleSize); }
 
     /**
@@ -69,9 +69,9 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      *                        <br>BEWARE: additional computing power required.
      * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull Projectile projectile,
-                                     @NotNull Color color,
-                                     double theta, double radius, int particleDensity, float particleSize) {
+    public DoubleHelixParticleEffect(@NotNull final Plugin plugin, @NotNull final Projectile projectile,
+                                     @NotNull final Color color,
+                                     final double theta, final double radius, final int particleDensity, final float particleSize) {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, color, theta, radius, particleDensity, particleSize); }
 
     /**
@@ -88,9 +88,9 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      *                        <br>BEWARE: additional computing power required.
      * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
-    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin, @NotNull Projectile projectile,
-                                     @NotNull Color color, int particleDensity, float particleSize) {
+    public DoubleHelixParticleEffect(@NotNull final Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull final Plugin plugin, @NotNull final Projectile projectile,
+                                     @NotNull final Color color, final int particleDensity, final float particleSize) {
         this(toPlayers, plugin, projectile, color, THETA, RADIUS, particleDensity, particleSize); }
 
     /**
@@ -109,9 +109,9 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      *                        <br>BEWARE: additional computing power required.
      * @param particleSize Allows specifying the size of RGB-particles. Default is 1
      */
-    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin, @NotNull Projectile projectile,
-                                     @NotNull Color color, double theta, double radius, int particleDensity, float particleSize) {
+    public DoubleHelixParticleEffect(@NotNull final Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull final Plugin plugin, @NotNull final Projectile projectile,
+                                     @NotNull final Color color, final double theta, final double radius, final int particleDensity, final float particleSize) {
         super(toPlayers, plugin);
         this.projectile = projectile;
         this.particleType = Particle.REDSTONE;
@@ -135,7 +135,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param plugin Plugin form which to send particles.
      * @param projectile The arrow the helix will spin around.
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin, @NotNull Projectile projectile) {
+    public DoubleHelixParticleEffect(@NotNull final Plugin plugin, @NotNull final Projectile projectile) {
         this(plugin, projectile, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
 
     /**
@@ -151,8 +151,8 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
      *                        <br>BEWARE: additional computing power required.
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin,@NotNull Projectile projectile, @NotNull Particle particleType,
-                                     int particleDensity) {
+    public DoubleHelixParticleEffect(@NotNull final Plugin plugin, @NotNull final Projectile projectile, @NotNull final Particle particleType,
+                                     final int particleDensity) {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, particleType, THETA, RADIUS, particleDensity);    }
 
     /**
@@ -170,9 +170,9 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
      *                        <br>BEWARE: additional computing power required.
      */
-    public DoubleHelixParticleEffect(@NotNull Plugin plugin,@NotNull Projectile projectile,
-                                     @NotNull Particle particleType,
-                                     double theta, double radius, int particleDensity) {
+    public DoubleHelixParticleEffect(@NotNull final Plugin plugin, @NotNull final Projectile projectile,
+                                     @NotNull final Particle particleType,
+                                     final double theta, final double radius, final int particleDensity) {
         this(Bukkit.getOnlinePlayers(), plugin, projectile, particleType, theta, radius, particleDensity);    }
 
     /**
@@ -185,8 +185,8 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param plugin Plugin form which to send particles.
      * @param projectile The arrow the helix will spin around.
      */
-    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin, @NotNull Projectile projectile) {
+    public DoubleHelixParticleEffect(@NotNull final Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull final Plugin plugin, @NotNull final Projectile projectile) {
         this(toPlayers, plugin, projectile, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
 
     /**
@@ -202,9 +202,9 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
      *                        <br>BEWARE: additional computing power required.
      */
-    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin,@NotNull Projectile projectile,
-                                     @NotNull Particle particleType, int particleDensity) {
+    public DoubleHelixParticleEffect(@NotNull final Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull final Plugin plugin, @NotNull final Projectile projectile,
+                                     @NotNull final Particle particleType, final int particleDensity) {
     this(toPlayers, plugin, projectile, particleType, THETA, RADIUS, particleDensity);      }
 
     /**
@@ -222,10 +222,10 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param particleDensity Amount of particles on the helix. Default is 2. Value of 2 = 2 x particles etc.
      *                        <br>BEWARE: additional computing power required.
      */
-    public DoubleHelixParticleEffect(@NotNull Collection<? extends org.bukkit.entity.Player> toPlayers,
-                                     @NotNull Plugin plugin,@NotNull Projectile projectile,
-                                     @NotNull Particle particleType,
-                                     double theta, double radius, int particleDensity) {
+    public DoubleHelixParticleEffect(@NotNull final Collection<? extends org.bukkit.entity.Player> toPlayers,
+                                     @NotNull final Plugin plugin, @NotNull final Projectile projectile,
+                                     @NotNull final Particle particleType,
+                                     final double theta, final double radius, final int particleDensity) {
         super(toPlayers, plugin);
         this.projectile = projectile;
         this.particleType = particleType;
@@ -250,7 +250,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
 
         try{
             n[0] = makeUnitVector(n[0]);
-        }catch (Exception e) {
+        }catch (final Exception e) {
             n[0] = crossProduct(direction[0], new DMatrix3(position.get(position.size()-1).a1,
                     position.get(position.size()-1).a2 + 0.1, position.get(position.size()-1).a3));
             n[0] = makeUnitVector(n[0]);
@@ -265,17 +265,17 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
     public void run() {
         if (arrowIsStuck()) this.cancel();
 
-        DMatrix3 pos =  Conversion.bukkitVecToMatrix(projectile.getLocation());
+        final DMatrix3 pos =  Conversion.bukkitVecToMatrix(projectile.getLocation());
 
         n[0] = rotateAboutVector(n[0], direction[0], theta);
 
-        DMatrix3 res = new DMatrix3(pos);
+        final DMatrix3 res = new DMatrix3(pos);
         addEquals(res, n[0]);
 
         additionalParticles(particleDensity, position.get(position.size()-1), pos);
         draw(particleType, res, 1, data);
 
-        DMatrix3 inverse = new DMatrix3(n[0]);
+        final DMatrix3 inverse = new DMatrix3(n[0]);
         scale(-2, inverse);
         addEquals(inverse, pos);
 
@@ -287,33 +287,33 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
 
     private boolean arrowIsStuck() {
         if (position.size() < 5) return false;
-        DMatrix3 comp = position.get(0);
+        final DMatrix3 comp = position.get(0);
         for (int i = 1; i < position.size(); i++) {
-            DMatrix3 temp = position.get(i);
+            final DMatrix3 temp = position.get(i);
             if(temp.a1 == comp.a1 &&temp.a2 == comp.a2 &&temp.a3 == comp.a3) continue;
             return false;
         }
         return true;
     }
 
-    private void additionalParticles(int partDens, DMatrix3 pos0, DMatrix3 pos1 ) {
+    private void additionalParticles(final int partDens, final DMatrix3 pos0, final DMatrix3 pos1 ) {
         if (partDens < 2) return;
-        DMatrix3 u = new DMatrix3(pos0);
+        final DMatrix3 u = new DMatrix3(pos0);
         subtractEquals(u, pos1);
         scale(1 / (double)partDens,u);
 
-        DMatrix3 pos = new DMatrix3(pos1);
+        final DMatrix3 pos = new DMatrix3(pos1);
         DMatrix3 nor = new DMatrix3(n[0]);
 
         for (int i = 0; i < partDens; i++) {
             nor = rotateAboutVector(nor, direction[0], -theta / (double)partDens);
             addEquals(pos, u);
 
-            DMatrix3 spawn = new DMatrix3(pos);
+            final DMatrix3 spawn = new DMatrix3(pos);
             addEquals(spawn, nor);
             draw(particleType, spawn, 1, data);
 
-            DMatrix3 inverse = new DMatrix3(nor);
+            final DMatrix3 inverse = new DMatrix3(nor);
             scale(-2, inverse);
             addEquals(inverse, pos);
             draw(particleType, inverse, 1, data);
