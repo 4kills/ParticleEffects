@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 import org.ejml.data.DMatrix3;
 
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -120,7 +121,9 @@ public class DrainParticleEffect extends AbstractParticleEffect {
     @Override
     public void run() {
         if (progress[0] >= Ops.calcLength(axis)) {
-            vertices.retainAll(vertices.subList(0,1));
+            try{
+                vertices.retainAll(vertices.subList(0,1));
+            } catch(ConcurrentModificationException ignore) { }
             double l = Ops.calcLength(progressor);
             progressor.set(Ops.makeUnitVector(progressor));
             scale(1.05 * l, progressor);

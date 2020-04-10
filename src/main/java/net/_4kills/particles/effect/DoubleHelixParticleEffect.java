@@ -4,6 +4,7 @@ import com.sun.istack.internal.NotNull;
 import net._4kills.particles.util.Conversion;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.Plugin;
 import org.ejml.data.DMatrix3;
