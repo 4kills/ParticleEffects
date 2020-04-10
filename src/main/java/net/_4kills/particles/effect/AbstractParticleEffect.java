@@ -1,9 +1,10 @@
 package net._4kills.particles.effect;
 
 import com.comphenix.protocol.wrappers.WrappedParticle;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,7 +25,20 @@ public abstract class AbstractParticleEffect extends BukkitRunnable {
 
     protected void draw(Particle particle, DMatrix3 location, int numberOfParticles,
                         @Nullable Particle.DustOptions data) {
+        // dev code for incompatible mc versions
+        World world = null;
+        for (Player p : toPlayers) {
+            world = p.getWorld();
+            break;
+        }
+        if (world == null) return;
         if(particle != Particle.REDSTONE && data != null) data = null;
+        if(particle == Particle.REDSTONE && data == null) data = new Particle.DustOptions(Color.RED, 1);
+        world.spawnParticle(particle, new Location(world, location.a1, location.a2, location.a3), numberOfParticles, data);
+        //END OF DEV CODE
+
+        // efficient packet code
+        /*if(particle != Particle.REDSTONE && data != null) data = null;
         if(particle == Particle.REDSTONE && data == null) data = new Particle.DustOptions(Color.RED, 1);
         WrapperPlayServerWorldParticles pp = new WrapperPlayServerWorldParticles();
         pp.setParticleType(WrappedParticle.create(particle, data));
@@ -38,6 +52,6 @@ public abstract class AbstractParticleEffect extends BukkitRunnable {
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
-        });
+        });*/
     }
 }
