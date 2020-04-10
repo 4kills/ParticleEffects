@@ -1,16 +1,12 @@
 package net._4kills.particles;
 
 import net._4kills.particles.effect.DoubleHelixParticleEffect;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Particle;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class EntityShootBowListener implements Listener {
     private ParticlesPluginHook plugin;
@@ -29,6 +25,6 @@ public class EntityShootBowListener implements Listener {
         if (!(entity instanceof Projectile)) return;
         final Projectile arrow = (Projectile) entity;
 
-        new DoubleHelixParticleEffect(plugin, arrow, Color.ORANGE, DoubleHelixParticleEffect.THETA, 0.6, 2, 1.5f);
+        new DoubleHelixParticleEffect(plugin, arrow, Color.ORANGE, DoubleHelixParticleEffect.DEFAULT_THETA, 0.6, 2, 1.5f);
     }
 }

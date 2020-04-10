@@ -4,7 +4,6 @@ import com.sun.istack.internal.NotNull;
 import net._4kills.particles.util.Conversion;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
-import org.bukkit.World;
 import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.Plugin;
 import org.ejml.data.DMatrix3;
@@ -31,9 +30,9 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
 
     private final Particle.DustOptions data;
 
-    public static final double THETA = 0.3 * Math.PI;
-    public static final double RADIUS = 0.35;
-    public static final int PARTICLE_DENSITY = 2;
+    public static final double DEFAULT_THETA = 0.3 * Math.PI;
+    public static final double DEFAULT_RADIUS = 0.35;
+    public static final int DEFAULT_PARTICLE_DENSITY = 2;
 
     /**
      * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
@@ -51,7 +50,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      */
     public DoubleHelixParticleEffect(@NotNull final Plugin plugin, @NotNull final Projectile projectile,
                                      @NotNull final Color color, final int particleDensity, final float particleSize) {
-        this(Bukkit.getOnlinePlayers(), plugin, projectile, color, THETA, RADIUS, particleDensity, particleSize); }
+        this(Bukkit.getOnlinePlayers(), plugin, projectile, color, DEFAULT_THETA, DEFAULT_RADIUS, particleDensity, particleSize); }
 
     /**
      * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
@@ -91,7 +90,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
     public DoubleHelixParticleEffect(@NotNull final Collection<? extends org.bukkit.entity.Player> toPlayers,
                                      @NotNull final Plugin plugin, @NotNull final Projectile projectile,
                                      @NotNull final Color color, final int particleDensity, final float particleSize) {
-        this(toPlayers, plugin, projectile, color, THETA, RADIUS, particleDensity, particleSize); }
+        this(toPlayers, plugin, projectile, color, DEFAULT_THETA, DEFAULT_RADIUS, particleDensity, particleSize); }
 
     /**
      * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
@@ -136,7 +135,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      * @param projectile The arrow the helix will spin around.
      */
     public DoubleHelixParticleEffect(@NotNull final Plugin plugin, @NotNull final Projectile projectile) {
-        this(plugin, projectile, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
+        this(plugin, projectile, Particle.REDSTONE, DEFAULT_THETA, DEFAULT_RADIUS, DEFAULT_PARTICLE_DENSITY);    }
 
     /**
      * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
@@ -153,7 +152,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      */
     public DoubleHelixParticleEffect(@NotNull final Plugin plugin, @NotNull final Projectile projectile, @NotNull final Particle particleType,
                                      final int particleDensity) {
-        this(Bukkit.getOnlinePlayers(), plugin, projectile, particleType, THETA, RADIUS, particleDensity);    }
+        this(Bukkit.getOnlinePlayers(), plugin, projectile, particleType, DEFAULT_THETA, DEFAULT_RADIUS, particleDensity);    }
 
     /**
      * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
@@ -187,7 +186,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
      */
     public DoubleHelixParticleEffect(@NotNull final Collection<? extends org.bukkit.entity.Player> toPlayers,
                                      @NotNull final Plugin plugin, @NotNull final Projectile projectile) {
-        this(toPlayers, plugin, projectile, Particle.REDSTONE, THETA, RADIUS, PARTICLE_DENSITY);    }
+        this(toPlayers, plugin, projectile, Particle.REDSTONE, DEFAULT_THETA, DEFAULT_RADIUS, DEFAULT_PARTICLE_DENSITY);    }
 
     /**
      * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
@@ -205,7 +204,7 @@ public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
     public DoubleHelixParticleEffect(@NotNull final Collection<? extends org.bukkit.entity.Player> toPlayers,
                                      @NotNull final Plugin plugin, @NotNull final Projectile projectile,
                                      @NotNull final Particle particleType, final int particleDensity) {
-    this(toPlayers, plugin, projectile, particleType, THETA, RADIUS, particleDensity);      }
+    this(toPlayers, plugin, projectile, particleType, DEFAULT_THETA, DEFAULT_RADIUS, particleDensity);      }
 
     /**
      * <p>Constructs a double helix particle effect about a projectile upon calling the constructor.
