@@ -106,7 +106,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         } catch (final Exception e){
             return false;
         }
-        if(Ops.isApproxEqual(progressor, newProg)) return true;
+        if(Ops.isApproxEqual(progressor, newProg, -1)) return true;
 
         final DMatrix3 ax = Ops.crossProduct(progressor, newProg);
         double phi = Ops.angleBetween(progressor, newProg);
