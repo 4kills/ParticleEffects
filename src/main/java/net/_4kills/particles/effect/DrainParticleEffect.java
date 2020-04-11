@@ -59,6 +59,8 @@ public class DrainParticleEffect extends AbstractParticleEffect {
     private final double height;
     private final Color color;
     private final FunctionParameters funcParams;
+    private final Particle particleType;
+    private final float particleSize;
     private final int numberOfParticles;
     private double[] progress = new double[1];
     private final List<DMatrix3> vertices = new LinkedList<>();
@@ -75,6 +77,8 @@ public class DrainParticleEffect extends AbstractParticleEffect {
     public static final int DEFAULT_RAY_COUNT = 6;
     public static final int DEFAULT_NUMBER_OF_PARTICLES = 1;
     public static final double DEFAULT_EFFECT_DURATION = 0.7;
+    public static final Particle DEFAULT_PARTICLE = Particle.REDSTONE;
+    public static final float DEFAULT_PARTICLE_SIZE = 1f;
     /**
      * The default function parameter so the curve just looks "good". There is no deeper intent behind these values.
      */
@@ -82,49 +86,53 @@ public class DrainParticleEffect extends AbstractParticleEffect {
             new FunctionParameters(4.4, 0.7,
                     4, 1.5, 0.05);
 
-    // most default constructor
+
     /**
      * For more information see
-     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, double, int,
+     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, Particle, float, double, int,
      * int, double, FunctionParameters)}
      */
     public DrainParticleEffect(final Plugin plugin, final Entity receiver, final Entity emitter) {
-        this(Bukkit.getOnlinePlayers(), plugin, receiver, emitter, DEFAULT_COLOR, CHEST_HEIGHT_OF_PLAYER,
-                DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
+        this(Bukkit.getOnlinePlayers(), plugin, receiver, emitter, DEFAULT_COLOR, DEFAULT_PARTICLE,
+                DEFAULT_PARTICLE_SIZE, CHEST_HEIGHT_OF_PLAYER, DEFAULT_RAY_COUNT,
+                DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
     }
 
     /**
      * For more information see
-     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, double, int,
+     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, Particle, float, double, int,
      * int, double, FunctionParameters)}
      */
     public DrainParticleEffect(final Plugin plugin, final Entity receiver, final Entity emitter,
                                final Color color, final double heightOfReceiverIntakePoint) {
-        this(Bukkit.getOnlinePlayers(), plugin, receiver, emitter, color, heightOfReceiverIntakePoint,
-                DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
+        this(Bukkit.getOnlinePlayers(), plugin, receiver, emitter, color, DEFAULT_PARTICLE, DEFAULT_PARTICLE_SIZE,
+                heightOfReceiverIntakePoint, DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES,
+                DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
     }
 
     /**
      * For more information see
-     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, double, int,
+     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, Particle, float, double, int,
      * int, double, FunctionParameters)}
      */
     public DrainParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin, final Entity receiver,
                                final Entity emitter) {
-        this(toPlayers, plugin, receiver, emitter, DEFAULT_COLOR, CHEST_HEIGHT_OF_PLAYER,
-                DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
+        this(toPlayers, plugin, receiver, emitter, DEFAULT_COLOR, DEFAULT_PARTICLE, DEFAULT_PARTICLE_SIZE,
+                CHEST_HEIGHT_OF_PLAYER, DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION,
+                DEFAULT_FUNCTION_PARAMETERS);
     }
 
     /**
      * For more information see
-     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, double, int,
+     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, Particle, float, double, int,
      * int, double, FunctionParameters)}
      */
     public DrainParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin, final Entity receiver,
                                final Entity emitter,
                                final Color color, final double heightOfReceiverIntakePoint) {
-        this(toPlayers, plugin, receiver, emitter, color, heightOfReceiverIntakePoint,
-                DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
+        this(toPlayers, plugin, receiver, emitter, color, DEFAULT_PARTICLE, DEFAULT_PARTICLE_SIZE,
+                heightOfReceiverIntakePoint, DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES,
+                DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
     }
 
     /**
@@ -148,7 +156,8 @@ public class DrainParticleEffect extends AbstractParticleEffect {
      *                                    the shape of the arcs/rays
      */
     public DrainParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin, final Entity receiver,
-                               final Entity emitter, final Color color, final double heightOfReceiverIntakePoint,
+                               final Entity emitter, final Color color, final Particle particleType,
+                               final float particleSize, final double heightOfReceiverIntakePoint,
                                final int rayCount, final int numberOfParticles, final double effectDuration,
                                final FunctionParameters funcParams) {
         super(toPlayers, plugin);
@@ -161,6 +170,8 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         this.receiver = receiver;
         this.rayCount = rayCount; // must be at least 1;
         this.color = color;
+        this.particleType = particleType;
+        this.particleSize = particleSize;
         this.numberOfParticles = numberOfParticles;
 
         final DMatrix3 locP = getReceiverIntakeLocation();
@@ -207,7 +218,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
             final DMatrix3 vector = new DMatrix3(vec);
             scale(0.3, vector);
             addEquals(vector, entityLoc);
-            draw(Particle.REDSTONE, vector, numberOfParticles, new Particle.DustOptions(color, 1));
+            draw(particleType, vector, numberOfParticles, new Particle.DustOptions(color, particleSize));
         });
 
         progress[0] = Ops.calcLength(progressor);
@@ -265,7 +276,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
             final DMatrix3 vector = new DMatrix3(vec);
             scale(r, vector);
             addEquals(vector, prevLoc);
-            draw(Particle.REDSTONE, vector, numberOfParticles, new Particle.DustOptions(color, 1));
+            draw(particleType, vector, numberOfParticles, new Particle.DustOptions(color, particleSize));
         });
 
         progress[0] += Ops.calcLength(progressor);
