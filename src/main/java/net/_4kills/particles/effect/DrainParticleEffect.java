@@ -19,24 +19,57 @@ import static java.lang.Math.addExact;
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
 public class DrainParticleEffect extends AbstractParticleEffect {
+    public static class FunctionParameters {
+        public final double maxDistanceBeforeReunion;
+        public final double horizontalDilation;
+        public final double base;
+        public final double horizontalOffset;
+        public final double verticalOffset;
+
+        public FunctionParameters(double maxDistanceBeforeReunion, double horizontalDilation, double base,
+                                  double horizontalOffset, double verticalOffset) {
+            this.maxDistanceBeforeReunion = maxDistanceBeforeReunion;
+            this.horizontalDilation = horizontalDilation;
+            this.base = base;
+            this.horizontalOffset = horizontalOffset;
+            this.verticalOffset = verticalOffset;
+        }
+    }
 
     private final DMatrix3 axis, entityLoc, progressor, prevLoc;
     private final Entity receiver;
     private final int rayCount;
+    private final double height;
+    private final Color color;
+    private final FunctionParameters funcParams;
     private double[] progress = new double[1];
     private final List<DMatrix3> vertices = new LinkedList<>();
 
-    private static final double TO_DESIRED_HEIGHT = 0.2;
-    private static final double EYE_HEIGHT = 1.62;
+    public static final double EYE_HEIGHT_OF_PLAYER = 1.62;
+    public static final double MOUTH_HEIGHT_OF_PLAYER = 1.42;
+    public static final double CHEST_HEIGHT_OF_PLAYER = 1.12;
 
-    public static final int RAY_COUNT = 6;
-
-
+    public static final Color DEFAULT_COLOR = Color.fromRGB(0x00fff2);
+    public static final int DEFAULT_RAY_COUNT = 6;
+    public static final double DEFAULT_EFFECT_DURATION = 0.7;
+    public static final FunctionParameters DEFAULT_FUNCTION_PARAMETERS =
+            new FunctionParameters(4.4, 0.7,
+                    4, 1.5, 0.05);
 
     public DrainParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin, final Entity receiver,
-                               final Entity emitter, final double effectDuration) {
+                               final Entity emitter, final Color color, final double heightOfReceiverIntakePoint,
+                               final int rayCount, final double effectDuration, final FunctionParameters funcParams) {
         super(toPlayers, plugin);
+        if (receiver == null || emitter == null || rayCount <= 0 || effectDuration <= 0 || funcParams == null
+                || color == null)
+            throw new IllegalArgumentException("One or more arguments had illegal values");
+
+        this.funcParams = funcParams;
+        this.height = heightOfReceiverIntakePoint;
         this.receiver = receiver;
+        this.rayCount = rayCount; // must be at least 1;
+        this.color = color;
+
         final DMatrix3 locP = getReceiverIntakeLocation();
         final DMatrix3 locE = Conversion.bukkitVecToMatrix(emitter.getLocation());
         addEquals(locE, new DMatrix3(0, emitter.getHeight() / 2, 0));
@@ -47,16 +80,15 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         axis = locP;
         progressor = new DMatrix3(axis);
         scale(1 / (effectDuration * 20), progressor);
-        rayCount = RAY_COUNT; // must be at least 1;
         prevLoc = new DMatrix3(entityLoc);
 
         init();
     }
 
     private double definingFunction(final double d) {
-        final double maxDistance = 4.4;
-        final double scale = Ops.calcLength(axis) / maxDistance;
-        return (0.7 / scale) * d * Math.pow(4, -d / scale + 1.5) - 0.05 * scale;
+        final double scale = Ops.calcLength(axis) / funcParams.maxDistanceBeforeReunion;
+        return (funcParams.horizontalDilation / scale) * d * Math.pow(funcParams.base, -d / scale +
+                funcParams.horizontalOffset) - funcParams.verticalOffset * scale;
     }
 
     private void init() {
@@ -82,7 +114,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
             final DMatrix3 vector = new DMatrix3(vec);
             scale(0.3, vector);
             addEquals(vector, entityLoc);
-            draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(Color.fromRGB(0x00fff2), 1));
+            draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(color, 1));
         });
 
         progress[0] = Ops.calcLength(progressor);
@@ -91,7 +123,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
 
     private DMatrix3 getReceiverIntakeLocation() {
         final DMatrix3 playerLoc = Conversion.bukkitVecToMatrix(receiver.getLocation());
-        playerLoc.a2 = playerLoc.a2 + EYE_HEIGHT - TO_DESIRED_HEIGHT;
+        playerLoc.a2 = playerLoc.a2 + height;
         return playerLoc;
     }
 
@@ -140,7 +172,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
             final DMatrix3 vector = new DMatrix3(vec);
             scale(r, vector);
             addEquals(vector, prevLoc);
-            draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(Color.fromRGB(0x00fff2), 1));
+            draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(color, 1));
         });
 
         progress[0] += Ops.calcLength(progressor);
