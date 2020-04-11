@@ -20,7 +20,9 @@ public class PlayerInteractEntityListener implements Listener {
     @EventHandler
     public void onOpenShop(final PlayerInteractEntityEvent event) {
         event.setCancelled(true);
-        new DrainParticleEffect(Bukkit.getOnlinePlayers(), plugin, event.getPlayer(), event.getRightClicked(), 0.7);
+        new DrainParticleEffect(Bukkit.getOnlinePlayers(), plugin, event.getPlayer(), event.getRightClicked());
+        
+
         /*if (event.getRightClicked().getType() != EntityType.VILLAGER) return;
 
         event.setCancelled(true);

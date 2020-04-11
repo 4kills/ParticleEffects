@@ -1,6 +1,7 @@
 package net._4kills.particles.effect;
 
 import net._4kills.particles.util.Conversion;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
@@ -15,7 +16,6 @@ import java.util.List;
 
 import net._4kills.particles.math.Ops;
 
-import static java.lang.Math.addExact;
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
 public class DrainParticleEffect extends AbstractParticleEffect {
@@ -26,8 +26,25 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         public final double horizontalOffset;
         public final double verticalOffset;
 
-        public FunctionParameters(double maxDistanceBeforeReunion, double horizontalDilation, double base,
-                                  double horizontalOffset, double verticalOffset) {
+        /**
+         * Provides the parameters to the function that defines the shape of the arcs/rays
+         *
+         * @param maxDistanceBeforeReunion The max distance after which the particles reunite in a straight axis.
+         *                                 Default: 4.4 m
+         * @param horizontalDilation       Stretches the effect horizontally.
+         *                                 Default: 0.7
+         * @param base                     The base of the exponential function. A higher base serves a steeper, higher
+         *                                 curve
+         *                                 Default: 4
+         * @param horizontalOffset         The offset where the effect should start. Zero offset starts the effect
+         *                                 within the emitter. These values are *not* in meters
+         *                                 Default: +1.5
+         * @param verticalOffset           The vertical offset of how far the initial particles should be apart and
+         *                                 whether they should reunite fully.
+         *                                 Default: 0.05m
+         */
+        public FunctionParameters(final double maxDistanceBeforeReunion, final double horizontalDilation,
+                                  final double base, final double horizontalOffset, final double verticalOffset) {
             this.maxDistanceBeforeReunion = maxDistanceBeforeReunion;
             this.horizontalDilation = horizontalDilation;
             this.base = base;
@@ -42,6 +59,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
     private final double height;
     private final Color color;
     private final FunctionParameters funcParams;
+    private final int numberOfParticles;
     private double[] progress = new double[1];
     private final List<DMatrix3> vertices = new LinkedList<>();
 
@@ -49,16 +67,90 @@ public class DrainParticleEffect extends AbstractParticleEffect {
     public static final double MOUTH_HEIGHT_OF_PLAYER = 1.42;
     public static final double CHEST_HEIGHT_OF_PLAYER = 1.12;
 
+    /**
+     * A cyan color tone. Could represent soul, mana or life energy. <br>
+     * You can also try Color.RED + {@link #MOUTH_HEIGHT_OF_PLAYER} for a vampiric, blood-sucking effect.
+     */
     public static final Color DEFAULT_COLOR = Color.fromRGB(0x00fff2);
     public static final int DEFAULT_RAY_COUNT = 6;
+    public static final int DEFAULT_NUMBER_OF_PARTICLES = 1;
     public static final double DEFAULT_EFFECT_DURATION = 0.7;
+    /**
+     * The default function parameter so the curve just looks "good". There is no deeper intent behind these values.
+     */
     public static final FunctionParameters DEFAULT_FUNCTION_PARAMETERS =
             new FunctionParameters(4.4, 0.7,
                     4, 1.5, 0.05);
 
+    // most default constructor
+    /**
+     * For more information see
+     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, double, int,
+     * int, double, FunctionParameters)}
+     */
+    public DrainParticleEffect(final Plugin plugin, final Entity receiver, final Entity emitter) {
+        this(Bukkit.getOnlinePlayers(), plugin, receiver, emitter, DEFAULT_COLOR, CHEST_HEIGHT_OF_PLAYER,
+                DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
+    }
+
+    /**
+     * For more information see
+     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, double, int,
+     * int, double, FunctionParameters)}
+     */
+    public DrainParticleEffect(final Plugin plugin, final Entity receiver, final Entity emitter,
+                               final Color color, final double heightOfReceiverIntakePoint) {
+        this(Bukkit.getOnlinePlayers(), plugin, receiver, emitter, color, heightOfReceiverIntakePoint,
+                DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
+    }
+
+    /**
+     * For more information see
+     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, double, int,
+     * int, double, FunctionParameters)}
+     */
+    public DrainParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin, final Entity receiver,
+                               final Entity emitter) {
+        this(toPlayers, plugin, receiver, emitter, DEFAULT_COLOR, CHEST_HEIGHT_OF_PLAYER,
+                DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
+    }
+
+    /**
+     * For more information see
+     * {@link #DrainParticleEffect(Collection, Plugin, Entity, Entity, Color, double, int,
+     * int, double, FunctionParameters)}
+     */
+    public DrainParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin, final Entity receiver,
+                               final Entity emitter,
+                               final Color color, final double heightOfReceiverIntakePoint) {
+        this(toPlayers, plugin, receiver, emitter, color, heightOfReceiverIntakePoint,
+                DEFAULT_RAY_COUNT, DEFAULT_NUMBER_OF_PARTICLES, DEFAULT_EFFECT_DURATION, DEFAULT_FUNCTION_PARAMETERS);
+    }
+
+    /**
+     * Constructs a particle "drain" effect that starts at the emitter, expands circularly
+     * until the particles hit the peak of expansion, then combusts again toward the the receiver.
+     * After a certain distance the particles reunite and track the receiver until he is hit with the particles.
+     * <p>For default-values please refer to the class constants. They are chosen so it 'just looks good'.</p>
+     *
+     * @param toPlayers                   Players to send particles to.
+     * @param plugin                      Plugin from which to send particles
+     * @param receiver                    The entity receiving the particles
+     * @param emitter                     The entity emitting the particles
+     * @param color                       The color of the particles
+     * @param heightOfReceiverIntakePoint Defines where the particles will hit the receiver.
+     *                                    This could be a player mouth, chest or eyes for instance,
+     *                                    but also a custom height for other entities
+     * @param rayCount                    The number of rays or arcs emitting from the emitter in a circular fashion
+     * @param numberOfParticles           The number of particles spawned at every location. Default is 1
+     * @param effectDuration              The time the effect takes to play
+     * @param funcParams                  The function parameters for the defining function that determines
+     *                                    the shape of the arcs/rays
+     */
     public DrainParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin, final Entity receiver,
                                final Entity emitter, final Color color, final double heightOfReceiverIntakePoint,
-                               final int rayCount, final double effectDuration, final FunctionParameters funcParams) {
+                               final int rayCount, final int numberOfParticles, final double effectDuration,
+                               final FunctionParameters funcParams) {
         super(toPlayers, plugin);
         if (receiver == null || emitter == null || rayCount <= 0 || effectDuration <= 0 || funcParams == null
                 || color == null)
@@ -69,6 +161,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
         this.receiver = receiver;
         this.rayCount = rayCount; // must be at least 1;
         this.color = color;
+        this.numberOfParticles = numberOfParticles;
 
         final DMatrix3 locP = getReceiverIntakeLocation();
         final DMatrix3 locE = Conversion.bukkitVecToMatrix(emitter.getLocation());
@@ -114,7 +207,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
             final DMatrix3 vector = new DMatrix3(vec);
             scale(0.3, vector);
             addEquals(vector, entityLoc);
-            draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(color, 1));
+            draw(Particle.REDSTONE, vector, numberOfParticles, new Particle.DustOptions(color, 1));
         });
 
         progress[0] = Ops.calcLength(progressor);
@@ -172,7 +265,7 @@ public class DrainParticleEffect extends AbstractParticleEffect {
             final DMatrix3 vector = new DMatrix3(vec);
             scale(r, vector);
             addEquals(vector, prevLoc);
-            draw(Particle.REDSTONE, vector, 1, new Particle.DustOptions(color, 1));
+            draw(Particle.REDSTONE, vector, numberOfParticles, new Particle.DustOptions(color, 1));
         });
 
         progress[0] += Ops.calcLength(progressor);
