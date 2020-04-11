@@ -19,6 +19,8 @@ public abstract class AbstractParticleEffect extends BukkitRunnable {
     protected final Plugin plugin;
 
     public AbstractParticleEffect(final Collection<? extends Player> toPlayers, final Plugin plugin) {
+        if (toPlayers == null || plugin == null)
+            throw new IllegalArgumentException("one of the parameters was null");
         this.toPlayers = toPlayers;
         this.plugin = plugin;
     }
