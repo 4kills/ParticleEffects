@@ -16,7 +16,7 @@ import java.util.List;
 import static net._4kills.particles.math.Ops.*;
 import static org.ejml.dense.fixed.CommonOps_DDF3.*;
 
-public final class DoubleHelixParticleEffect extends AbstractParticleEffect {
+public class DoubleHelixParticleEffect extends AbstractParticleEffect {
 
     private final DMatrix3[] direction = new DMatrix3[1];
     private final List<DMatrix3> position = new LinkedList<DMatrix3>();
