@@ -3,6 +3,7 @@ package net._4kills.particles;
 import net._4kills.particles.effect.DrainParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +26,7 @@ public class PlayerInteractEntityListener implements Listener {
         event.setCancelled(true);
         //new DrainParticleEffect(Bukkit.getOnlinePlayers(), plugin, event.getPlayer(), event.getRightClicked());
         new DrainParticleEffect(Bukkit.getOnlinePlayers(), plugin, event.getPlayer(),event.getRightClicked(),
-                Color.PURPLE, DrainParticleEffect.MOUTH_HEIGHT_OF_PLAYER, 3, 5, 2,
+                Color.PURPLE, Particle.REDSTONE, 1,  DrainParticleEffect.MOUTH_HEIGHT_OF_PLAYER, 3, 5, 2,
                 new DrainParticleEffect.FunctionParameters(2, 1, 4, 1.5, 0.001));
     }
 }
