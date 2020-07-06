@@ -2,7 +2,16 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<img align="right" width="267" height="140" src="https://github.com/4kills/ParticleEffects/blob/master/pictures/DoubleHelixParticleEffect.gif">
+
 This library allows you to incorporate a variety of astounding visual effects into your Minecraft server plugin!  
+
+The computations are entirely server based and highly efficient. The clients only receive the particles which ensures minimal load on their side,
+to avoid driving away clients with older or lower-end hardware! 
+You can also precisely control who will see which effects! 
+
+All of the effects are highly configurable and customizable!
+
 
 ## Table of Contents
 - [Installation](#installation)
@@ -13,7 +22,7 @@ This library allows you to incorporate a variety of astounding visual effects in
 
 # Usage
 
-To display a particle effect you just have to call the constructor of the coresponding class and the effect will display automatically. 
+To display a particle effect you just have to call the constructor of the corresponding class and the effect will display automatically. 
 
 The following example illustrates the usage of a double helix effect that spins around a given projectile: 
 
@@ -25,16 +34,21 @@ public void onEntityShootBowEvent(final EntityShootBowEvent event) {
     
     /*
       Create a new orange-colored double helix particle effect around arrow, 
-      sending packets to the client from the provided plugin, with default rotation arch theta, 
+      sending packets to the client from the provided plugin, with default rotation arc theta, 
       a radius around the projectile of 0.6m (blocks), a particle density of 2 (default is 1) 
       and 1.5 x default particle size.
       
       This is one of many constructor overloads that provide a variety of tweakable attributes 
       to fine-tune the effect to your needs!
     */
-    new DoubleHelixParticleEffect(plugin, arrow, Color.ORANGE, DoubleHelixParticleEffect.DEFAULT_THETA, 0.6, 2, 1.5f);
+    new DoubleHelixParticleEffect(plugin, arrow, Color.ORANGE, 
+        DoubleHelixParticleEffect.DEFAULT_THETA, 0.6, 2, 1.5f);
 }
 ```  
+
+Which will look like that:
+
+![DoubleHelixParticleEffectGif](https://github.com/4kills/ParticleEffects/blob/master/pictures/DoubleHelixParticleEffect.gif)
 
 All of the other effects are used in the same fashion and have analogous parameters. 
 
