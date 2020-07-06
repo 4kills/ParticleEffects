@@ -20,6 +20,12 @@ All of the effects are highly configurable and customizable!
 
 # Installation
 
+For this library to function you will need [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/) in your server/plugins folder. 
+
+To use this library with your plugin just download and add as dependency the [latest .jar release.](https://github.com/4kills/ParticleEffects/releases)
+
+Keep in mind that that jar has to be bundled with your plugin or be present in the server/plugin folder along with your plugin in order to work. 
+
 # Usage
 
 To display a particle effect you just have to call the constructor of the corresponding class and the effect will display automatically. 
