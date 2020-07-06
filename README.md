@@ -7,11 +7,36 @@ This library allows you to incorporate a variety of astounding visual effects in
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
-- [Attribution](#links)
+- [Attribution](#attribution)
 
 # Installation
 
 # Usage
+
+To display a particle effect you just have to call the constructor of the coresponding class and the effect will display automatically. 
+
+The following example illustrates the usage of a double helix effect that spins around a given projectile: 
+
+```java
+@EventHandler
+public void onEntityShootBowEvent(final EntityShootBowEvent event) {
+    // ..null-checks/instanceof omitted..
+    final Projectile arrow = (Projectile) event.getProjectile();
+    
+    /*
+      Create a new orange-colored double helix particle effect around arrow, 
+      sending packets to the client from the provided plugin, with default rotation arch theta, 
+      a radius around the projectile of 0.6m (blocks), a particle density of 2 (default is 1) 
+      and 1.5 x default particle size.
+      
+      This is one of many constructor overloads that provide a variety of tweakable attributes 
+      to fine-tune the effect to your needs!
+    */
+    new DoubleHelixParticleEffect(plugin, arrow, Color.ORANGE, DoubleHelixParticleEffect.DEFAULT_THETA, 0.6, 2, 1.5f);
+}
+```  
+
+All of the other effects are used in the same fashion and have analogous parameters. 
 
 # Attribution
 
@@ -24,8 +49,7 @@ This library allows you to incorporate a variety of astounding visual effects in
     <summary> License </summary> 
   
   ```text
-  Author: Peter Abeles 
-          peter.abeles@gmail.com
+  Copyright (C) Peter Abeles <peter.abeles@gmail.com>
           
                                 Apache License
                            Version 2.0, January 2004
