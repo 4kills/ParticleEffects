@@ -12,7 +12,6 @@ You can also precisely control who will see which effects!
 
 All of the effects are highly configurable and customizable!
 
-
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
@@ -25,6 +24,11 @@ For this library to function you will need [ProtocolLib](https://www.spigotmc.or
 To use this library with your plugin just download and add as dependency the [latest .jar release.](https://github.com/4kills/ParticleEffects/releases)
 
 Keep in mind that that jar has to be bundled with your plugin or be present in the server/plugin folder along with your plugin in order to work. 
+
+To import the library and use the effects:
+```java
+import net._4kills.particles.effect.*;
+```
 
 # Usage
 
