@@ -6,7 +6,7 @@
 
 This library allows you to incorporate a variety of astounding visual effects into your Minecraft server plugin!  
 
-The computations are entirely server based and highly efficient. The clients only receive the particles which ensures minimal load on their side,
+The computations are entirely server-based and highly efficient. The clients only receive the particles which ensures minimal load on their side,
 to avoid driving away clients with older or lower-end hardware! 
 You can also precisely control who will see which effects! 
 
