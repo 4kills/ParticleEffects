@@ -27,20 +27,8 @@ public abstract class AbstractParticleEffect extends BukkitRunnable {
 
     protected void draw(final Particle particle, final DMatrix3 location, final int numberOfParticles,
                         @Nullable Particle.DustOptions data) {
-        // dev code for incompatible mc versions
-        World world = null;
-        for (final Player p : toPlayers) {
-            world = p.getWorld();
-            break;
-        }
-        if (world == null) return;
-        if(particle != Particle.REDSTONE && data != null) data = null;
-        if(particle == Particle.REDSTONE && data == null) data = new Particle.DustOptions(Color.RED, 1);
-        world.spawnParticle(particle, new Location(world, location.a1, location.a2, location.a3), numberOfParticles, data);
-        //END OF DEV CODE
-
         // efficient packet code
-        /*if(particle != Particle.REDSTONE && data != null) data = null;
+        if(particle != Particle.REDSTONE && data != null) data = null;
         if(particle == Particle.REDSTONE && data == null) data = new Particle.DustOptions(Color.RED, 1);
         WrapperPlayServerWorldParticles pp = new WrapperPlayServerWorldParticles();
         pp.setParticleType(WrappedParticle.create(particle, data));
@@ -54,6 +42,6 @@ public abstract class AbstractParticleEffect extends BukkitRunnable {
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
-        });*/
+        });
     }
 }
